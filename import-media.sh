@@ -7,18 +7,21 @@ MEDIA=0
 
 # Parse commandline parameters
 ALLARGS="$@"
-set -- $(getopt aufhko: -- "$@")
-while true;
-do
-	case "$1" in
-	(-h) echo -e "Usage: $(basename $0) [-mt]\n\nm = Movie\nt = TV Show\n"; exit 0;;
-	(-m) $MEDIA='Movie';;
-	(-t) $MEDIA='TV';;
-	(-*) echo "Error: unrecognized option $1" 1>&2; exit 1;;
-	(*)  break;;
-	esac
-	shift
-done
+if [[ $ALLARGS =~ .*-m.* ]]
+then
+   MEDIA="Movies"
+fi
+if [[ $ALLARGS =~ .*-t.* ]]
+then 
+   MEDIA="TV Shows"
+fi
+if [ "$MEDIA" = '' ]
+then
+   echo "Invalid command line parameters."
+   echo "Please use -m for Movies and -t for TV Shows."
+   exit
+fi
+
 
 #run commands from path of scripts
 MY_PATH="`dirname \"$0\"`"              # relative
@@ -52,7 +55,18 @@ find /mnt/files/Complete/ -type f -name 'RARBG.COM.mp4' -delete
 find /mnt/files/Complete/ -type f -name 'sample.avi' -delete
 
 #rename files and update metadata, move them from the import directory to staging
-sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Complete/" -r --format "{n} - {y}" --output /mnt/files/Movies/
+
+#movies
+if [ $MEDIA='Movies' ];
+then
+   sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Complete/" -r --format "{n} - {y}" --output "/mnt/files/Movies/"
+fi
+
+#TV Shows
+if [ $MEDIA='TV Shows' ];
+then
+   sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Complete/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output /mnt/files/TV\ Shows/ -non-strict
+fi
 
 #clean up empty folders in the staging directory
 find /mnt/files/Complete/ -empty -type d -delete
@@ -60,5 +74,14 @@ find /mnt/files/Complete/ -empty -type d -delete
 #display remaining files in the staging directory in case filebot misses any
 find /mnt/files/Complete/
 
-#move files from staging to library
-mv /mnt/files/Movies/* /mnt/share/Movies/
+#move movies from staging to library
+if [ $MEDIA='Movies' ];
+then
+   mv /mnt/files/Movies/* "/mnt/share/Movies/"
+fi
+
+#move tv shows from staging to library
+if [ $MEDIA='TV Shows' ];
+then
+   mv /mnt/files/Movies/* "/mnt/share/TV Shows/"
+fi
