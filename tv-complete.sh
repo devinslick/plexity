@@ -19,4 +19,4 @@ find /mnt/files/Complete/ -type f -name 'sample.avi' -delete
 sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Complete/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output /mnt/files/TV\ Shows/ -non-strict
 find /mnt/files/Complete/ -empty -type d -delete
 find /mnt/files/Complete/
-sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/TV Shows/" --output "/mnt/share/TV Shows/"
+sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/TV Shows/" --output "/mnt/share/TV Shows/" -non-strict -no-xattr
