@@ -28,6 +28,8 @@ cd $MY_PATH
 git config --global core.filemode false
 
 #self update
+git stash save --keep-index
+git stash drop
 git pull
 
 #give other scripts in current directory execute permissions (others may have been added)
