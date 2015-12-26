@@ -1,6 +1,14 @@
 #!/bin/bash
 #
+
+#self update
 git pull
+#give other scripts in current directory execute permissions (others may have been added)
+chmod +x *.sh
+#ignore permissions changes when performing updates (git pull)
+git config --global core.filemode false
+
+
 find /mnt/files/Complete/ -type f -name '*.jpg' -delete
 find /mnt/files/Complete/ -type f -name '*.jpeg' -delete
 find /mnt/files/Complete/ -type f -name '*.txt' -delete
