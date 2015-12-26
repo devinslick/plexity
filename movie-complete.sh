@@ -1,6 +1,21 @@
 #!/bin/bash
 #
 
+# Parse commandline parameters
+ALLARGS="$@"
+set -- $(getopt aufhko: -- "$@")
+while true;
+do
+	case "$1" in
+	(-h) echo -e "Usage: $(basename $0) [-mt]\n\nm = Movie\nt = TV Show\n"; exit 0;;
+	(-m) Movie;;
+	(-t) TV Show;;
+	(-*) echo "Error: unrecognized option $1" 1>&2; exit 1;;
+	(*)  break;;
+	esac
+	shift
+done
+
 #run commands from path of scripts
 MY_PATH="`dirname \"$0\"`"              # relative
 MY_PATH="`( cd \"$MY_PATH\" && pwd )`"  # absolutized and normalized
