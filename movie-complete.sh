@@ -14,3 +14,4 @@ find /mnt/files/Complete/ -type f -name 'sample.avi' -delete
 sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Complete/" -r --format "{n} - {y}" --output /mnt/files/Movies/
 find /mnt/files/Complete/ -empty -type d -delete
 find /mnt/files/Complete/
+sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Movies/" --output /mnt/share/Movies/
