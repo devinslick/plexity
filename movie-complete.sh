@@ -2,7 +2,7 @@
 #
 
 #settings
-$MEDIA=0
+MEDIA=0
 
 
 # Parse commandline parameters
