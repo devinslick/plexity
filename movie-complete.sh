@@ -1,6 +1,10 @@
 #!/bin/bash
 #
 
+#settings
+$MEDIA=0
+
+
 # Parse commandline parameters
 ALLARGS="$@"
 set -- $(getopt aufhko: -- "$@")
@@ -8,8 +12,8 @@ while true;
 do
 	case "$1" in
 	(-h) echo -e "Usage: $(basename $0) [-mt]\n\nm = Movie\nt = TV Show\n"; exit 0;;
-	(-m) Movie;;
-	(-t) TV Show;;
+	(-m) $MEDIA='Movie';;
+	(-t) $MEDIA='TV';;
 	(-*) echo "Error: unrecognized option $1" 1>&2; exit 1;;
 	(*)  break;;
 	esac
