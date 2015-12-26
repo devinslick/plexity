@@ -1,6 +1,5 @@
-
-
-
+#!/bin/bash
+#
 
 #autoupdate script from repo
 git >/dev/null 2>/dev/null
