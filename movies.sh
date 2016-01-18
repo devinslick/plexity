@@ -25,7 +25,6 @@ fi
 echo "OK"
 popd >/dev/null
 $0 ${ALLARGS} -U
-exit $?
 
 find /mnt/files/Complete/ -type f -size -50M -exec rm {} +
 mkdir -p /mnt/files/Movies/1080/
