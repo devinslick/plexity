@@ -46,9 +46,9 @@ Wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/File
 Yum -y unzip
 
 echo Setting up cronjobs...
-echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
 #filebot update not working from cron
 #(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
+echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
 (crontab -l ; echo "0 3 * * * /root/scripts/plexupdate/plexupdate.sh") | crontab -
-(crontab -l ; echo "30 3 * * * /usr/bin/yum -y -R 120 -d 0 -e 0 -x kernel* update) | crontab -
 (crontab -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m > /dev/null 2>&1") | crontab -
+(crontab -l ; echo "0 4 * * * /usr/bin/yum -y -d 0 -e 0 -x kernel* update") | crontab -
