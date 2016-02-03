@@ -45,6 +45,26 @@ echo Installing Filebot
 Wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip?r=http%3A%2F%2Fwww.filebot.net%2F&ts=1449410469&use_mirror=iweb
 Yum -y unzip
 
+echo Installing Plex...
+echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
+read -n 1 -p "Do you have a PlexPass (y/n)? " answer
+if [ $answer = 'y' ]; then
+  read -p "Enter your PlexPass username or email address:" $plexuser
+  read -p "Enter your PlexPass password:" $plexpassword
+  echo 'EMAIL='$plexuser > '/root/.plexupdate'
+  echo 'PASS='$plexpassword >> '/root/.plexupdate'
+  echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
+  echo 'RELEASE=64-bit' >> '/root/.plexupdate'
+  echo 'KEEP=no' >> '/root/.plexupdate'
+  echo 'FORCE=yes' >> '/root/.plexupdate'
+  echo 'PUBLIC=no' >> '/root/.plexupdate'
+  echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+  echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+  echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+  echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+fi
+
+
 echo Setting up cronjobs...
 #filebot update not working from cron
 #(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
