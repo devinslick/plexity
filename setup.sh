@@ -47,12 +47,14 @@ Yum -y unzip
 
 echo Installing Plex...
 echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
-read -n 1 -p "Do you have a PlexPass (y/n)? " answer
-if [ $answer = 'y' ]; then
-  read -p "Enter your PlexPass username or email address:" $plexuser
-  read -p "Enter your PlexPass password:" $plexpassword
-  echo 'EMAIL='$plexuser > '/root/.plexupdate'
-  echo 'PASS='$plexpassword >> '/root/.plexupdate'
+read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
+if [ $plexpass = 'y' ]; then
+  echo -n "Enter your PlexPass username or email address: "
+  read plexuser
+  echo -n "Enter your PlexPass password: "
+  read plexpassword
+  echo "EMAIL="$plexuser > '/root/.plexupdate'
+  echo "PASS="$plexpassword >> '/root/.plexupdate'
   echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
   echo 'RELEASE=64-bit' >> '/root/.plexupdate'
   echo 'KEEP=no' >> '/root/.plexupdate'
@@ -63,7 +65,6 @@ if [ $answer = 'y' ]; then
   echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
   echo 'AUTOSTART=yes' >> '/root/.plexupdate'
 fi
-
 
 echo Setting up cronjobs...
 #filebot update not working from cron
