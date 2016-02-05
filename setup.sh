@@ -89,9 +89,9 @@ echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
 #filebot update not working from cron
 #(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
 if [ $installDeepSecurity = 'y' ]; then
-  (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -d 0 -e 0 -x kernel* update") | crontab -
   (crontab -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m > /dev/null 2>&1") | crontab -
   (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 -x kernel* update") | crontab -
+  (crontab -l ; echo "30 4 * * * /root/scripts/plexity/ds_kernel.sh") | crontab -
 else
   (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 update") | crontab -
 fi
