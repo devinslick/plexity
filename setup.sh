@@ -48,7 +48,7 @@ if [ $installDeepSecurity = 'y' ]; then
   read dsm
   wget https://$dsm:4119/software/agent/RedHat_EL7/x86_64/ -O /tmp/agent.rpm --no-check-certificate --quiet
   rpm -ihv /tmp/agent.rpm
-  /opt/ds_agent/dsa_control -a dsm://Slick-DSM.devinslick.com:4120/
+  /opt/ds_agent/dsa_control -a dsm://$dsm.devinslick.com:4120/
   chkconfig iptables off
   systemctl stop firewalld, systemctl disable firewalld
   sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
@@ -94,9 +94,11 @@ if [ $plexpass = 'y' ]; then
 fi
 
 echo Setting up cronjobs...
-#filebot update not working from cron
-#(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
 echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
 (crontab -l ; echo "0 3 * * * /root/scripts/plexupdate/plexupdate.sh") | crontab -
-(crontab -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m > /dev/null 2>&1") | crontab -
-(crontab -l ; echo "0 4 * * * /usr/bin/yum -y -d 0 -e 0 -x kernel* update") | crontab -
+#filebot update not working from cron
+#(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
+if [ $installDeepSecurity = 'y' ]; then
+  (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -d 0 -e 0 -x kernel* update") | crontab -
+  (crontab -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m > /dev/null 2>&1") | crontab -
+fi
