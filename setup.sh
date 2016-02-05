@@ -43,8 +43,10 @@ if [ $installDeepSecurity = 'y' ]; then
   echo "Kernel updates should only be installed if they've been confirmed compatible with Deep Security."
   echo "To avoid incompatibily, I'm excluding kernel updates from yum."
   echo "Don't worry, I'll give you a script and a cronjob to automatically update to the latest supported kernel!"
-  echo exclude=kernel* redhat-release* >> /etc/yum.conf
-  wget https://Slick-DSM.devinslick.com:4119/software/agent/RedHat_EL7/x86_64/ -O /tmp/agent.rpm --no-check-certificate --quiet
+  grep -q -F 'exclude=kernel* redhat-release*' foo.bar || echo 'exclude=kernel* redhat-release*' >> /etc/yum.conf
+  echo -n "Enter your Deep Security Manager address (eg: dsm.mydomain.com) : "
+  read dsm
+  wget https://$dsm:4119/software/agent/RedHat_EL7/x86_64/ -O /tmp/agent.rpm --no-check-certificate --quiet
   rpm -ihv /tmp/agent.rpm
   /opt/ds_agent/dsa_control -a dsm://Slick-DSM.devinslick.com:4120/
   chkconfig iptables off
@@ -78,8 +80,8 @@ if [ $plexpass = 'y' ]; then
   read plexuser
   echo -n "Enter your PlexPass password: "
   read plexpassword
-  echo "EMAIL="$plexuser > '/root/.plexupdate'
-  echo "PASS="$plexpassword >> '/root/.plexupdate'
+  echo -e "EMAIL="$plexuser > '/root/.plexupdate'
+  echo -e "PASS="$plexpassword >> '/root/.plexupdate'
   echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
   echo 'RELEASE=64-bit' >> '/root/.plexupdate'
   echo 'KEEP=no' >> '/root/.plexupdate'
