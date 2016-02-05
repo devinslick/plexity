@@ -6,6 +6,7 @@ if [ $installContinue = 'n' ]; then
 fi
 
 sudo bash
+yum -y update
 
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
 
@@ -48,7 +49,7 @@ if [ $installDeepSecurity = 'y' ]; then
   read dsm
   wget https://$dsm:4119/software/agent/RedHat_EL7/x86_64/ -O /tmp/agent.rpm --no-check-certificate --quiet
   rpm -ihv /tmp/agent.rpm
-  /opt/ds_agent/dsa_control -a dsm://$dsm.devinslick.com:4120/
+  /opt/ds_agent/dsa_control -a dsm://$dsm:4120/
   chkconfig iptables off
   systemctl stop firewalld, systemctl disable firewalld
   sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
@@ -60,17 +61,6 @@ cd /root/scripts
 git clone https://github.com/devinslick/plexity.git
 chmod +x /root/scripts/plexity/*.sh
 git clone https://github.com/devinslick/plexupdate.git
-
-
-echo Installing and configuring automatic updates
-yum -y install yum-cron
-systemctl start yum-cron
-sed -ie 's/# assumeyes = True/assumeyes = True/' /etc/yum/yum-cron.conf
-sed -ie 's/apply_updates = no/apply_updates = yes/' /etc/yum/yum-cron.conf
-sed -ie 's/random_sleep = 360/random_sleep = 0/' /etc/yum/yum-cron.conf
-sed -ie 's/assumeyes = True/assumeyes = False/' /etc/yum/yum-cron.conf
-systemctl restart yum-cron
-yum -y update
 
 echo Installing Plex...
 echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
@@ -101,4 +91,7 @@ echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
 if [ $installDeepSecurity = 'y' ]; then
   (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -d 0 -e 0 -x kernel* update") | crontab -
   (crontab -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m > /dev/null 2>&1") | crontab -
+  (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 -x kernel* update") | crontab -
+else
+  (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 update") | crontab -
 fi
