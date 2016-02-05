@@ -15,7 +15,17 @@ yum -y install yum make gcc pam-devel wget git
 
 echo "Installing various media plugins applications..."
 yum -y install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
-yum -y install vlc smplayer ffmpeg HandBrake-{gui,cli} libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld
+yum -y install ffmpeg libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld
+
+read -n 1 -p "Would you like to install HandBrake? [y/n]: " installHandBrake
+if [ $installHandBrake = 'y' ]; then
+  yum -y install HandBrake-{gui,cli}
+fi
+
+read -n 1 -p "Would you like to install SMPlayer and VLC Media Players? [y/n]: " installVLC
+if [ $installVLC = 'y' ]; then
+  yum -y install vlc
+fi
 
 read -n 1 -p "Would you like to install Transmission for torrenting? [y/n]: " installTransmission
 if [ $installTransmission = 'y' ]; then
@@ -27,7 +37,7 @@ fi
 if [ $installTransmission = 'y' ]; then
   echo "FileBot is a tool used to help automate renaming media."
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
-  Yum -y unzip java
+  yum -y unzip java
   wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip?r=http%3A%2F%2Fwww.filebot.net%2F&ts=1449410469&use_mirror=iweb
   mkdir -p /scripts/filebot/
   mv FileBot_4.6* /scripts/filebot/
@@ -56,7 +66,7 @@ if [ $installDeepSecurity = 'y' ]; then
 fi
 
 echo Importing scripts from github...
-mkdir /root/scripts/
+mkdir -p /root/scripts/
 cd /root/scripts
 git clone https://github.com/devinslick/plexity.git
 chmod +x /root/scripts/plexity/*.sh
