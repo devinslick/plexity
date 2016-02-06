@@ -107,5 +107,5 @@ else
 fi
 read -n 1 -p "Would you like these scripts to automatically update themselves from github (y/n)? " selfupdate
 if [ $selfupdate = 'y' ]; then
-  (crontab -l ; echo "0 3 * * * /root/scripts/update.sh") | crontab -
+  (crontab -l ; echo "0 3 * * * /root/scripts/plexity/update.sh") | crontab -
 fi
