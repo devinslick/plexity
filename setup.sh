@@ -105,3 +105,7 @@ if [ $installDeepSecurity = 'y' ]; then
 else
   (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 update") | crontab -
 fi
+read -n 1 -p "Would you like these scripts to automatically update themselves from github (y/n)? " selfupdate
+if [ $selfupdate = 'y' ]; then
+  (crontab -l ; echo "30 3 * * * /root/scripts/update.sh") | crontab -
+fi
