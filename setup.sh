@@ -95,7 +95,7 @@ fi
 
 echo Setting up cronjobs...
 echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
-(crontab -l ; echo "0 3 * * * /root/scripts/plexupdate/plexupdate.sh") | crontab -
+(crontab -l ; echo "30 3 * * * /root/scripts/plexupdate/plexupdate.sh") | crontab -
 #filebot update not working from cron
 #(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
 if [ $installDeepSecurity = 'y' ]; then
@@ -107,5 +107,5 @@ else
 fi
 read -n 1 -p "Would you like these scripts to automatically update themselves from github (y/n)? " selfupdate
 if [ $selfupdate = 'y' ]; then
-  (crontab -l ; echo "30 3 * * * /root/scripts/update.sh") | crontab -
+  (crontab -l ; echo "0 3 * * * /root/scripts/update.sh") | crontab -
 fi
