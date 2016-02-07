@@ -10,7 +10,7 @@ RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
 installed=$(uname -a)
 if [[ $installed == *"$RESULTS"* ]]
 then
-  echo "You are already running the latest CentOS 7 kernel supported by Trend Micro Deep Security."
+  echo "You are already running the latest CentOS 7 kernel supported by Deep Security."
 else
   echo Attempting to install CentOS 7 kernel $RESULTS
   install=$(yum install kernel-$RESULTS)
