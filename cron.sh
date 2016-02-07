@@ -6,7 +6,7 @@
 #update scripts from repo at 2:30am
 echo "30 2 * * * /root/scripts/plexity/update.sh" | crontab -
 #rebuild cronjobs at 3am
-(crontab -l ; echo "0 3 * * * /root/scripts/plexity/cron.sh") | crontab -
+(crontab -l ; echo "0 3 * * * /root/scripts/plexity/cron.sh > /dev/null 2>&1") | crontab -
 dsagent=$(yum info ds_agent.x86_64 | grep "Repo        : installed")
 if [[ $dsagent == *"installed"* ]]
 then
