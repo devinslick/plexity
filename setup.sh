@@ -93,18 +93,6 @@ if [ $plexpass = 'y' ]; then
 fi
 
 echo Setting up cronjobs...
-echo '0 4 * * * /root/scripts/plexity/ds_kernel.sh' | crontab -
-(crontab -l ; echo "30 3 * * * /root/scripts/plexupdate/plexupdate.sh") | crontab -
-#filebot update not working from cron
-#(crontab -l ; echo "0 3 * * * /root/scripts/filebot/update-filebot.sh") | crontab -
-if [ $installDeepSecurity = 'y' ]; then
-  (crontab -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m > /dev/null 2>&1") | crontab -
-  (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 -x kernel* update") | crontab -
-  (crontab -l ; echo "30 4 * * * /root/scripts/plexity/ds_kernel.sh") | crontab -
-else
-  (crontab -l ; echo "0 4 * * * /usr/bin/yum -y -e 0 update") | crontab -
-fi
-read -n 1 -p "Would you like these scripts to automatically update themselves from github (y/n)? " selfupdate
-if [ $selfupdate = 'y' ]; then
-  (crontab -l ; echo "0 3 * * * /root/scripts/plexity/update.sh") | crontab -
-fi
+sh /root/scripts/cron.sh
+
+echo Done
