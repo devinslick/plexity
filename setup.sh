@@ -69,7 +69,6 @@ echo Importing scripts from github...
 mkdir -p /root/scripts/
 cd /root/scripts
 git clone https://github.com/devinslick/plexity.git
-chmod +x /root/scripts/plexity/*.sh
 git clone https://github.com/devinslick/plexupdate.git
 
 echo Installing Plex...
