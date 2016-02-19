@@ -7,11 +7,11 @@ fi
 
 mkdir -p /mnt/files/Queue/TV/
 mkdir -p /mnt/files/Queue/Movies/
-mkdir -p /mnt/files/Queue/Trash/
+mkdir -p /mnt/files/Trash/
 mkdir -p /mnt/files/Movies/
 mkdir -p /mnt/files/TV/
 
-find /mnt/files/Complete/ -type f -size -40M -exec mv {} /mnt/files/Queue/Trash/ \; >/dev/null
+find /mnt/files/Complete/ -type f -size -40M -exec mv {} /mnt/files/Trash/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size -500M -exec mv {} /mnt/files/Queue/TV/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size +500M -exec mv {} /mnt/files/Queue/Movies/ \; >/dev/null
 
@@ -32,6 +32,6 @@ echo Complete
 echo Moving files from /mnt/files/TV to /mnt/share/TV Shows...
 ls /mnt/files/TV
 echo ...
-mv --no-clobber /mnt/files/TV/* /mnt/share/TV Shows/
+mv --no-clobber /mnt/files/TV/* "/mnt/share/TV Shows/"
 find "/mnt/files/TV/" -empty -type d -delete
 echo Complete
