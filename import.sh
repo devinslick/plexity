@@ -37,9 +37,9 @@ find "/mnt/files/TV/" -empty -type d -delete
 
 echo "Checking /mnt/files/Trash for compressed files..."
 if [ -f *.zip ] ||  [ -f *.rar ] ||  [ -f *.001 ]; then
-  echo "Compressed files were found.  Please move or delete these so automatic trash cleanup can continue.
+  echo "Compressed files were found.  Please move or delete these so automatic trash cleanup can continue."
 else
-  echo Cleaning /mnt/files/Trash...
+  echo "Cleaning /mnt/files/Trash..."
   /root/scripts/filebot/filebot.sh -script fn:cleaner /mnt/files/Trash --def root=y
 fi
 
