@@ -25,14 +25,14 @@ find /mnt/files/Complete/ -empty -type d -delete
 echo Moving files from /mnt/files/Movies to /mnt/share/Movies...
 ls /mnt/files/Movies
 echo ...
-mv --no-clobber /mnt/files/Movies/* /mnt/share/Movies/ > /dev/null
+mv --no-clobber /mnt/files/Movies/* /mnt/share/Movies/ &> /dev/null
 find "/mnt/files/Movies/" -empty -type d -delete
 echo Complete
 
 echo Moving files from /mnt/files/TV to /mnt/share/TV Shows...
 ls /mnt/files/TV
 echo ...
-mv --no-clobber /mnt/files/TV/* "/mnt/share/TV Shows/" > /dev/null
+mv --no-clobber /mnt/files/TV/* "/mnt/share/TV Shows/" &> /dev/null
 find "/mnt/files/TV/" -empty -type d -delete
 
 echo "Checking /mnt/files/Trash for compressed files..."
