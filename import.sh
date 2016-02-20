@@ -34,4 +34,13 @@ ls /mnt/files/TV
 echo ...
 mv --no-clobber /mnt/files/TV/* "/mnt/share/TV Shows/"
 find "/mnt/files/TV/" -empty -type d -delete
+
+echo "Checking /mnt/files/Trash for compressed files..."
+if [ -f *.zip ] ||  [ -f *.rar ] ||  [ -f *.001 ]; then
+  echo "Compressed files were found.  Please move or delete these so automatic trash cleanup can continue.
+else
+  echo Cleaning /mnt/files/Trash...
+  /root/scripts/filebot/filebot.sh -script fn:cleaner /mnt/files/Trash --def root=y
+fi
+
 echo Complete
