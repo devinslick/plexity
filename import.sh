@@ -12,6 +12,7 @@ mkdir -p /mnt/files/Movies/
 mkdir -p /mnt/files/TV/
 
 find /mnt/files/Complete/ -type f -size -40M -exec mv {} /mnt/files/Trash/ \; >/dev/null
+find /mnt/files/Complete/ -type f -size -100M -iname "*sample*" -exec mv {} /mnt/files/Trash/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size -500M -exec mv {} /mnt/files/Queue/TV/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size +500M -exec mv {} /mnt/files/Queue/Movies/ \; >/dev/null
 
