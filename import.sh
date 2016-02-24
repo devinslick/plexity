@@ -16,7 +16,7 @@ find /mnt/files/Complete/ -type f -size -200M -iname "*sample*" -exec mv {} /mnt
 find /mnt/files/Complete/ -type f -size -500M -exec mv {} /mnt/files/Queue/TV/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size +500M -exec mv {} /mnt/files/Queue/Movies/ \; >/dev/null
 
-sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Queue/TV/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/files/TV/" -non-strict
+sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/Queue/TV/" -r --format "{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/files/TV/" -non-strict
 sudo /root/scripts/filebot/filebot.sh -rename /mnt/files/Queue/Movies/ -r --format "{n} ({y})" --output "/mnt/files/Movies/" -non-strict
 
 
@@ -33,7 +33,8 @@ echo Complete
 echo Moving files from /mnt/files/TV to /mnt/share/TV Shows...
 ls /mnt/files/TV
 echo ...
-mv -n /mnt/files/TV/* "/mnt/share/TV Shows/" &> /dev/null
+#mv -n /mnt/files/TV/* "/mnt/share/TV Shows/" &> /dev/null
+sudo /root/scripts/filebot/filebot.sh -rename "/mnt/files/TV/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/share/TV Shows/" -non-strict
 find "/mnt/files/TV/" -empty -type d -delete
 
 echo "Checking /mnt/files/Trash for compressed files..."
