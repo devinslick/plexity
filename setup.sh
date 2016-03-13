@@ -17,6 +17,10 @@ echo "Installing various media plugins applications..."
 yum -y install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
 yum -y install ffmpeg libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld
 
+echo -n "Enter your email address.  This will be used to send nightly reports of job completion.  :"
+read emailaddress
+echo $emailaddress > /etc/emailaddress
+
 read -n 1 -p "Would you like to install HandBrake? [y/n]: " installHandBrake
 if [ $installHandBrake = 'y' ]; then
   yum -y install HandBrake-{gui,cli}
