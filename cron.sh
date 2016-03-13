@@ -40,3 +40,6 @@ then
   #update plexmediaserver at 4:30am
   (crontab -l ; echo "30 3 * * * /root/scripts/plexupdate/plexupdate.sh >> /mnt/files/log 2>&1") | crontab -
 fi
+
+#Send log file to configured email address and then delete it
+(crontab -l ; echo "0 4 * * * cat /mnt/files/log | /usr/bin/mailx -s 'Nightly cron results' $(cat /etc/emailaddress) && rm -rf /mnt/files/log") | crontab -
