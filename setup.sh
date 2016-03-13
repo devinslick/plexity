@@ -11,7 +11,7 @@ yum -y update
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
 
 echo "Installing server prerequisites and dependencies..."
-yum -y install yum make gcc pam-devel wget git
+yum -y install yum make gcc pam-devel wget git mailx
 
 echo "Installing various media plugins applications..."
 yum -y install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
