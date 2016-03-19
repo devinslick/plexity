@@ -42,4 +42,4 @@ then
 fi
 
 #Send log file to configured email address and then delete it
-(crontab -l ; echo "0 4 * * * cat /mnt/files/log | /usr/bin/mailx -E -r cronjob@$(cat /etc/hostname) -s $(cat /etc/hostname) $(cat /etc/emailaddress) && rm -rf /mnt/files/log") | crontab -
+(crontab -l ; echo "0 4 * * * cat /mnt/files/log | /root/scripts/plexity/notify.sh && rm -rf /mnt/files/log") | crontab -
