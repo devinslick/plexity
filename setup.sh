@@ -98,42 +98,44 @@ echo Importing scripts from github...
 mkdir -p /root/scripts/
 cd /root/scripts
 git clone https://github.com/devinslick/plexity.git
-git clone https://github.com/devinslick/plexupdate.git
 
-echo Installing Plex...
-echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
-read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
-if [ $plexpass = 'y' ]; then
-   echo "Enter your PlexPass username or email address: "
-   read plexuser
-   echo -n "Enter your PlexPass password: "
-   read plexpassword
-   echo -e "EMAIL="$plexuser > '/root/.plexupdate'
-   echo -e "PASS="$plexpassword >> '/root/.plexupdate'
-   echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
-   echo 'RELEASE=64' >> '/root/.plexupdate'
-   echo 'KEEP=no' >> '/root/.plexupdate'
-   echo 'FORCE=yes' >> '/root/.plexupdate'
-   echo 'PUBLIC=no' >> '/root/.plexupdate'
-   echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
-   echo 'AUTODELETE=yes' >> '/root/.plexupdate'
-   echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
-   echo 'AUTOSTART=yes' >> '/root/.plexupdate'
-else
-   echo 'DOWNLOADDIR=.' > '/root/.plexupdate'
-   echo 'RELEASE=64' >> '/root/.plexupdate'
-   echo 'KEEP=no' >> '/root/.plexupdate'
-   echo 'FORCE=yes' >> '/root/.plexupdate'
-   echo 'PUBLIC=yes' >> '/root/.plexupdate'
-   echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
-   echo 'AUTODELETE=yes' >> '/root/.plexupdate'
-   echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
-   echo 'AUTOSTART=yes' >> '/root/.plexupdate'
-fi
-
+echo 
+read -n 1 -p "Would you like to install the Plex Media Server on this machine? [y/n]: " installPlex
+if [ $installPlex = 'y' ]; then
+   echo "Adding plexupdate scripts for automatic updates..."
+   git clone https://github.com/devinslick/plexupdate.git
+   echo Installing Plex...
+   echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
+   read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
+   if [ $plexpass = 'y' ]; then
+      echo "Enter your PlexPass username or email address: "
+      read plexuser
+      echo -n "Enter your PlexPass password: "
+      read plexpassword
+      echo -e "EMAIL="$plexuser > '/root/.plexupdate'
+      echo -e "PASS="$plexpassword >> '/root/.plexupdate'
+      echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
+      echo 'RELEASE=64' >> '/root/.plexupdate'
+      echo 'KEEP=no' >> '/root/.plexupdate'
+      echo 'FORCE=yes' >> '/root/.plexupdate'
+      echo 'PUBLIC=no' >> '/root/.plexupdate'
+      echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+      echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+      echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+      echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+   else
+      echo 'DOWNLOADDIR=.' > '/root/.plexupdate'
+      echo 'RELEASE=64' >> '/root/.plexupdate'
+      echo 'KEEP=no' >> '/root/.plexupdate'
+      echo 'FORCE=yes' >> '/root/.plexupdate'
+      echo 'PUBLIC=yes' >> '/root/.plexupdate'
+      echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+      echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+      echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+      echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+   fi
 fi
 
 echo Setting up cronjobs...
 sh /root/scripts/cron.sh
-
 echo Done
