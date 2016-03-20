@@ -21,9 +21,9 @@ fi
 if [[ $dsagent == *"installed"* ]]
 then
   #update packages other than kernel at 3:30am
-  (crontab -l ; echo "45 2 * * * /usr/bin/yum -y -e 0 -x kernel* update | /root/scripts/plexity/notify.sh") | crontab -
+  (crontab -l ; echo "45 2 * * * /root/scripts/plexity/update-centos.sh | /root/scripts/plexity/notify.sh") | crontab -
 else
-  (crontab -l ; echo "45 2 * * * /usr/bin/yum -y -e 0 update | /root/scripts/plexity/notify.sh") | crontab -
+  (crontab -l ; echo "45 2 * * * /root/scripts/plexity/update-centos.sh | /root/scripts/plexity/notify.sh") | crontab -
 fi
 
 if [[ $dsagent == *"installed"* ]]
