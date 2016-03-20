@@ -13,7 +13,7 @@ then
 fi
 
 #update scripts at 2:30am
-(crontab -l ; echo "30 2 * * * /root/scripts/plexity/update.sh | /root/scripts/plexity/notify.sh") | crontab -
+(crontab -l ; echo "30 2 * * * /root/scripts/plexity/update-scripts.sh | /root/scripts/plexity/notify.sh") | crontab -
 
 #rebuild cronjobs at 2:40am
 (crontab -l ; echo "40 2 * * * /root/scripts/plexity/cron.sh | /root/scripts/plexity/notify.sh") | crontab -
