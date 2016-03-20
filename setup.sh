@@ -5,7 +5,6 @@ if [ $installContinue = 'n' ]; then
   exit
 fi
 
-sudo bash
 yum -y update
 
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
@@ -17,9 +16,35 @@ echo "Installing various media plugins applications..."
 yum -y install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
 yum -y install ffmpeg libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld
 
-echo -n "Enter your email address.  This will be used to send nightly reports of job completion.  :"
+echo "Your email address can be used to receive nightly reports when jobs complete."
+echo "You may also wish to use your Pushover.net email account or another service"
+echo -n "Enter the email address to receive updates: "
 read emailaddress
-echo $emailaddress > /etc/emailaddress
+if [ ${#emailaddress} -ge 5 ]
+then
+   echo $emailaddress > /etc/emailaddress
+   echo "Email address saved to /etc/emailaddress"
+else
+   echo "No email address entered, skipping."
+fi
+
+echo "If you're familiar with Pushover.net, you may wish to create a custom application to receive notifications."
+echo "Create a custom application in pushover.net for the API key.   Without this, notifications will be transferred over email."
+echo "If you provide neither a User key or API key then notifications will fall back to your previously entered email address."
+echo -n "Enter your Pushover.net User key or just [ENTER] to skip:"
+read pushoveruser
+echo $pushoveruser > /etc/pushover.user.key
+
+echo -n "Enter your Pushover.net API key or just [ENTER] to skip:"
+read pushoverapi
+if [ ${#pushoverapi} -ge 5 ]
+then
+   echo $pushoverapi > /etc/pushover.api.key
+   echo "Pushover API key saved to /etc/pushover.api.key"
+else
+   echo "No Pushover API key entered, skipping."
+fi
+
 
 read -n 1 -p "Would you like to install HandBrake? [y/n]: " installHandBrake
 if [ $installHandBrake = 'y' ]; then
@@ -79,21 +104,33 @@ echo Installing Plex...
 echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
 read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
 if [ $plexpass = 'y' ]; then
-  echo -n "Enter your PlexPass username or email address: "
-  read plexuser
-  echo -n "Enter your PlexPass password: "
-  read plexpassword
-  echo -e "EMAIL="$plexuser > '/root/.plexupdate'
-  echo -e "PASS="$plexpassword >> '/root/.plexupdate'
-  echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
-  echo 'RELEASE=64' >> '/root/.plexupdate'
-  echo 'KEEP=no' >> '/root/.plexupdate'
-  echo 'FORCE=yes' >> '/root/.plexupdate'
-  echo 'PUBLIC=no' >> '/root/.plexupdate'
-  echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
-  echo 'AUTODELETE=yes' >> '/root/.plexupdate'
-  echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
-  echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+   echo "Enter your PlexPass username or email address: "
+   read plexuser
+   echo -n "Enter your PlexPass password: "
+   read plexpassword
+   echo -e "EMAIL="$plexuser > '/root/.plexupdate'
+   echo -e "PASS="$plexpassword >> '/root/.plexupdate'
+   echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
+   echo 'RELEASE=64' >> '/root/.plexupdate'
+   echo 'KEEP=no' >> '/root/.plexupdate'
+   echo 'FORCE=yes' >> '/root/.plexupdate'
+   echo 'PUBLIC=no' >> '/root/.plexupdate'
+   echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+   echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+   echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+   echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+else
+   echo 'DOWNLOADDIR=.' > '/root/.plexupdate'
+   echo 'RELEASE=64' >> '/root/.plexupdate'
+   echo 'KEEP=no' >> '/root/.plexupdate'
+   echo 'FORCE=yes' >> '/root/.plexupdate'
+   echo 'PUBLIC=yes' >> '/root/.plexupdate'
+   echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+   echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+   echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+   echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+fi
+
 fi
 
 echo Setting up cronjobs...
