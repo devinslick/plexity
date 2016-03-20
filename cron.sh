@@ -41,5 +41,5 @@ then
   (crontab -l ; echo "30 3 * * * /root/scripts/plexupdate/plexupdate.sh | /root/scripts/plexity/notify.sh") | crontab -
 fi
 
-#Send log file to configured email address and then delete it
-(crontab -l ; echo "0 4 * * * cat /mnt/files/log | /root/scripts/plexity/notify.sh && rm -rf /mnt/files/log") | crontab -
+#Send log file with notify.sh
+(crontab -l ; echo "0 4 * * * cat /mnt/files/log | /root/scripts/plexity/notify.sh") | crontab -
