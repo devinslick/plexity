@@ -40,6 +40,3 @@ then
   #update plexmediaserver at 4:30am
   (crontab -l ; echo "30 3 * * * /root/scripts/plexupdate/plexupdate.sh | /root/scripts/plexity/notify.sh") | crontab -
 fi
-
-#Send log file with notify.sh
-(crontab -l ; echo "0 4 * * * cat /mnt/files/log | /root/scripts/plexity/notify.sh") | crontab -
