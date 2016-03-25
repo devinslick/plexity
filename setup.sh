@@ -5,6 +5,8 @@ if [ $installContinue = 'n' ]; then
   exit
 fi
 
+mkdir /var/plexity
+
 yum -y update
 
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
@@ -22,8 +24,8 @@ echo -n "Enter the email address to receive updates: "
 read emailaddress
 if [ ${#emailaddress} -ge 5 ]
 then
-   echo $emailaddress > /var/emailaddress
-   echo "Email address saved to /var/emailaddress"
+   echo $emailaddress > /var/plexity/emailaddress
+   echo "Email address saved to /var/plexity/emailaddress"
 else
    echo "No email address entered, skipping."
 fi
@@ -33,14 +35,14 @@ echo "Create a custom application in pushover.net for the API key.   Without thi
 echo "If you provide neither a User key or API key then notifications will fall back to your previously entered email address."
 echo -n "Enter your Pushover.net User key or just [ENTER] to skip:"
 read pushoveruser
-echo $pushoveruser > /var/pushover.user.key
+echo $pushoveruser > /var/plexity/pushover.user.key
 
 echo -n "Enter your Pushover.net API key or just [ENTER] to skip:"
 read pushoverapi
 if [ ${#pushoverapi} -ge 5 ]
 then
-   echo $pushoverapi > /var/pushover.api.key
-   echo "Pushover API key saved to /var/pushover.api.key"
+   echo $pushoverapi > /var/plexity/pushover.api.key
+   echo "Pushover API key saved to /var/plexity/pushover.api.key"
 else
    echo "No Pushover API key entered, skipping."
 fi
