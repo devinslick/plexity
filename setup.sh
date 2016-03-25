@@ -139,5 +139,5 @@ if [ $installPlex = 'y' ]; then
 fi
 
 echo Setting up cronjobs...
-sh /root/scripts/cron.sh
+sh /opt/plexity/update-crontab.sh
 echo Done
