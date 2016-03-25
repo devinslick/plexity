@@ -70,10 +70,10 @@ if [ $installTransmission = 'y' ]; then
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
   yum -y unzip java
   wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip?r=http%3A%2F%2Fwww.filebot.net%2F&ts=1449410469&use_mirror=iweb
-  mkdir -p /scripts/filebot/
-  mv FileBot_4.6* /scripts/filebot/
-  unzip /scripts/filebot/FileBot_4.6* -d /scripts/filebot/ -x *.exe
-  rm -rf /root/scripts/filebot/*.zip
+  mkdir -p /opt/filebot/
+  mv FileBot_4.6* /opt/filebot/
+  unzip /opt/filebot/FileBot_4.6* -d /opt/filebot/ -x *.exe
+  rm -rf /opt/filebot/*.zip
   echo "FileBot has been installed!"
 fi
 
@@ -97,8 +97,8 @@ if [ $installDeepSecurity = 'y' ]; then
 fi
 
 echo Importing scripts from github...
-mkdir -p /root/scripts/
-cd /root/scripts
+mkdir -p /opt/plexity
+cd /opt/plexity
 git clone https://github.com/devinslick/plexity.git
 
 echo 
