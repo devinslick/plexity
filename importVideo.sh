@@ -16,9 +16,8 @@ echo "Looking for compresed files..."
 find /mnt/files/Complete/ -type f -iname "*.sfv" -exec mv {} /mnt/files/Queue/Compressed/ \; >/dev/null
 find /mnt/files/Complete/ -type f -iname "*.rar" -exec mv {} /mnt/files/Queue/Compressed/ \; >/dev/null
 find /mnt/files/Complete/ -type f -iname "*.r[0-9][0-9]" -exec mv {} /mnt/files/Queue/Compressed/ \; >/dev/null
-unrar x /mnt/files/Queue/Compressed/*.rar
-mv /mnt/files/Queue/Compressed/* /mnt/files/Complete/
-
+unrar x /mnt/files/Queue/Compressed/*.rar /mnt/files/Complete > /dev/null
+rm -rf /mnt/files/Queue/Compressed
 
 find /mnt/files/Complete/ -type f -size -40M -exec mv {} /mnt/files/Trash/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size -200M -iname "*sample*" -exec mv {} /mnt/files/Trash/ \; >/dev/null
