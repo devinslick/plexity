@@ -22,8 +22,8 @@ echo -n "Enter the email address to receive updates: "
 read emailaddress
 if [ ${#emailaddress} -ge 5 ]
 then
-   echo $emailaddress > /etc/emailaddress
-   echo "Email address saved to /etc/emailaddress"
+   echo $emailaddress > /var/emailaddress
+   echo "Email address saved to /var/emailaddress"
 else
    echo "No email address entered, skipping."
 fi
@@ -33,14 +33,14 @@ echo "Create a custom application in pushover.net for the API key.   Without thi
 echo "If you provide neither a User key or API key then notifications will fall back to your previously entered email address."
 echo -n "Enter your Pushover.net User key or just [ENTER] to skip:"
 read pushoveruser
-echo $pushoveruser > /etc/pushover.user.key
+echo $pushoveruser > /var/pushover.user.key
 
 echo -n "Enter your Pushover.net API key or just [ENTER] to skip:"
 read pushoverapi
 if [ ${#pushoverapi} -ge 5 ]
 then
-   echo $pushoverapi > /etc/pushover.api.key
-   echo "Pushover API key saved to /etc/pushover.api.key"
+   echo $pushoverapi > /var/pushover.api.key
+   echo "Pushover API key saved to /var/pushover.api.key"
 else
    echo "No Pushover API key entered, skipping."
 fi
