@@ -15,29 +15,29 @@ then
 fi
 
 #update scripts at 2:30am
-(crontab -l ; echo "30 2 * * * /root/scripts/plexity/update-scripts.sh | /root/scripts/plexity/notify.sh") | crontab -
+(crontab -l ; echo "30 2 * * * /opt/plexity/update-scripts.sh | /opt/plexity/notify.sh") | crontab -
 
 #rebuild cronjobs at 2:40am
-(crontab -l ; echo "40 2 * * * /root/scripts/plexity/update-crontab.sh | /root/scripts/plexity/notify.sh") | crontab -
+(crontab -l ; echo "40 2 * * * /opt/plexity/update-crontab.sh | /opt/plexity/notify.sh") | crontab -
 
 if [[ $dsagent == *"installed"* ]]
 then
   #update packages other than kernel at 3:30am
-  (crontab -l ; echo "45 2 * * * /root/scripts/plexity/update-centos.sh | /root/scripts/plexity/notify.sh") | crontab -
+  (crontab -l ; echo "45 2 * * * /opt/plexity/update-centos.sh | /opt/plexity/notify.sh") | crontab -
 else
-  (crontab -l ; echo "45 2 * * * /root/scripts/plexity/update-centos.sh | /root/scripts/plexity/notify.sh") | crontab -
+  (crontab -l ; echo "45 2 * * * /opt/plexity/update-centos.sh | /opt/plexity/notify.sh") | crontab -
 fi
 
 if [[ $dsagent == *"installed"* ]]
 then
   #update the kernel to the latest supported by Deep Security at 4am
-  (crontab -l ; echo "0 3 * * * /root/scripts/plexity/ds_kernel.sh | /root/scripts/plexity/notify.sh") | crontab -
+  (crontab -l ; echo "0 3 * * * /opt/plexity/ds_kernel.sh | /opt/plexity/notify.sh") | crontab -
 fi
 
 if [[ $plexmediaserver == *"installed"* ]]
 then
   #update plexmediaserver at 4:30am
-  (crontab -l ; echo "30 3 * * * /root/scripts/plexupdate/plexupdate.sh | /root/scripts/plexity/notify.sh") | crontab -
+  (crontab -l ; echo "30 3 * * * /opt/plexupdate/plexupdate.sh | /opt/plexity/notify.sh") | crontab -
 fi
 echo -e "\nCrontab has been updated:"
 crontab -l
