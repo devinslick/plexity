@@ -14,11 +14,11 @@ then
   echo "*/30 * * * * /opt/ds_agent/dsa_control -m >> /dev/null 2>&1" | crontab -u plexity -
 fi
 
-#update scripts at 2:30am
-(crontab -u plexity -l ; echo "30 2 * * * /opt/plexity/update-scripts.sh | /opt/plexity/notify.sh") | crontab -u plexity -
+#update scripts at 2:00am
+(crontab -u plexity -l ; echo "0 2 * * * /opt/plexity/update-scripts.sh | /opt/plexity/notify.sh") | crontab -u plexity -
 
-#rebuild cronjobs at 2:40am
-(crontab -u plexity -l ; echo "40 2 * * * /opt/plexity/update-crontab.sh | /opt/plexity/notify.sh") | crontab -u plexity -
+#rebuild cronjobs at 2:15am
+(crontab -u plexity -l ; echo "15 2 * * * /opt/plexity/update-crontab.sh | /opt/plexity/notify.sh") | crontab -u plexity -
 
 if [[ $dsagent == *"installed"* ]]
 then
@@ -36,6 +36,8 @@ fi
 
 if [[ $plexmediaserver == *"installed"* ]]
 then
+  #update filebot at 2:30am
+  (crontab -u plexity -l ; echo "30 2 * * * /opt/plexity-filebot/update-filebot.sh | /opt/plexity/notify.sh") | crontab -u plexity -
   #update plexmediaserver at 4:30am
   (crontab -u plexity -l ; echo "30 3 * * * /opt/plexity/update-plex.sh") | crontab -u plexity -
 fi
