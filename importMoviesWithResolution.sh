@@ -11,27 +11,27 @@ mkdir -p /mnt/files/Movies/
 
 echo Checking for 1080p movies...
 find /mnt/files/Complete/ -iname "*1080*" -type f -exec mv {} /mnt/files/Queue/ \; >/dev/null
-sudo /opt/filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 1080p" --output "/mnt/files/Movies/" -non-strict
+sudo /opt/plexity-filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 1080p" --output "/mnt/files/Movies/" -non-strict
 find /mnt/files/Complete/ -empty -type d -delete
 
 if [ -d "/mnt/files/Complete/" ]; then
   echo More movies exist, checking for 720p...
   find /mnt/files/Complete/ -iname "*720*" -type f -exec mv {} /mnt/files/Queue/ \; >/dev/null
-  sudo /opt/filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 720p" --output "/mnt/files/Movies/" -non-strict
+  sudo /opt/plexity-filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 720p" --output "/mnt/files/Movies/" -non-strict
   find /mnt/files/Complete/ -empty -type d -delete
 fi
 
 if [ -d "/mnt/files/Complete/" ]; then
   echo Checking for 480p movies...
   find /mnt/files/Complete/ -name "*480*" -type f -exec mv {} /mnt/files/Queue/ \; >/dev/null
-  sudo /opt/filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 480p" --output "/mnt/files/Movies/" -non-strict
+  sudo /opt/plexity-filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 480p" --output "/mnt/files/Movies/" -non-strict
   find /mnt/files/Complete/ -empty -type d -delete
 fi
 
 if [ -d "/mnt/files/Complete/" ]; then
   echo Checking for 360p movies...
   find /mnt/files/Complete/ -name "*360p*" -type f -exec mv {} /mnt/files/Queue/ \; >/dev/null
-  sudo /opt/filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 480p" --output "/mnt/files/Movies/" -non-strict
+  sudo /opt/plexity-filebot/filebot.sh -rename /mnt/files/Queue/ -r --format "{n} - {y} - 480p" --output "/mnt/files/Movies/" -non-strict
   find /mnt/files/Complete/ -empty -type d -delete
 fi
 
@@ -48,19 +48,19 @@ if [ -d "/mnt/files/Complete/" ]; then
     if [ $height -ge 800 ]; then
       echo 1080p
       mv $movie "/mnt/files/Queue/"
-      sudo /opt/filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 1080p" --output "/mnt/files/Movies/" -non-strict
+      sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 1080p" --output "/mnt/files/Movies/" -non-strict
     elif [ $height -ge 530 ]; then
       echo 720p
       mv $movie /mnt/files/Queue/
-      sudo /opt/filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 720p" --output "/mnt/files/Movies/" -non-strict
+      sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 720p" --output "/mnt/files/Movies/" -non-strict
     elif [ $height -ge 390 ]; then
       echo 480p
       mv $movie /mnt/files/Queue/
-      sudo /opt/filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 480p" --output "/mnt/files/Movies/" -non-strict
+      sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 480p" --output "/mnt/files/Movies/" -non-strict
     elif [ $height -ge 340 ]; then
       echo 360p
       mv $movie /mnt/files/Queue/
-      sudo /opt/filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 360p" --output "/mnt/files/Movies/" -non-strict
+      sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/" -r --format "{n} - {y} - 360p" --output "/mnt/files/Movies/" -non-strict
     fi
   done
 
