@@ -68,15 +68,12 @@ fi
 read -n 1 -p "Would you like to install Transmission for torrenting? [y/n]: " installTransmission
 if [ $installTransmission = 'y' ]; then
   echo Installing transmission...
-  yum -y install epel-* transmission transmission-daemon
+  yum -y install epel-* transmission transmission-daemon unzip
   chkconfig transmission-daemon on
-fi
-
-if [ $installTransmission = 'y' ]; then
   echo "FileBot is a tool used to help automate renaming media."
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
-  yum -y unzip java
-  wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip?r=http%3A%2F%2Fwww.filebot.net%2F&ts=1449410469&use_mirror=iweb
+  yum -y install java
+  wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip
   mkdir -p /opt/plexity-filebot/
   mv FileBot_4.6* /opt/plexity-filebot/
   unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
