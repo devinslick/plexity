@@ -12,7 +12,6 @@ mkdir -p /mnt/files/Trash/
 mkdir -p /mnt/files/Movies/
 mkdir -p /mnt/files/TV/
 
-echo "Looking for compresed files..."
 find /mnt/files/Complete/ -type f -iname "*.sfv" -exec mv {} /mnt/files/Queue/Compressed/ \; >/dev/null
 find /mnt/files/Complete/ -type f -iname "*.rar" -exec mv {} /mnt/files/Queue/Compressed/ \; >/dev/null
 find /mnt/files/Complete/ -type f -iname "*.r[0-9][0-9]" -exec mv {} /mnt/files/Queue/Compressed/ \; >/dev/null
@@ -24,35 +23,29 @@ find /mnt/files/Complete/ -type f -size -200M -iname "*sample*" -exec mv {} /mnt
 find /mnt/files/Complete/ -type f -size -500M -exec mv {} /mnt/files/Queue/TV/ \; >/dev/null
 find /mnt/files/Complete/ -type f -size +500M -exec mv {} /mnt/files/Queue/Movies/ \; >/dev/null
 
-sudo /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/mnt/files/Queue/TV/"
-sudo /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/mnt/files/Queue/Movies/"
-sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/TV/" -r --format "{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/files/TV/" -non-strict
-sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/Movies/" -r --format "{n} ({y})" --output "/mnt/files/Movies/" -non-strict
-
-
 find /mnt/files/Queue/ -empty -type d -delete
 find /mnt/files/Complete/ -empty -type d -delete
 
-echo Moving files from /mnt/files/Movies to /mnt/share/Movies...
-ls /mnt/files/Movies
-echo ...
-mv -n /mnt/files/Movies/* /mnt/share/Movies/ &> /dev/null
-find "/mnt/files/Movies/" -empty -type d -delete
-echo Complete
+if [ -d "/mnt/files/Queue/Movies/" ]; then
+  echo Processing Movies...
+  /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/mnt/files/Queue/Movies/" >/dev/null
+  /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/Movies/" -r --format "{n} ({y})" --output "/mnt/files/Movies/" -non-strict
+  ls /mnt/files/Movies
+  echo ...
+  mv -n /mnt/files/Movies/* /mnt/share/Movies/ &> /dev/null
+  find "/mnt/files/Movies/" -empty -type d -delete
+  echo Complete
+fi
 
-echo Moving files from /mnt/files/TV to /mnt/share/TV Shows...
-ls /mnt/files/TV
-echo ...
-sudo /opt/plexity-filebot/filebot.sh -rename "/mnt/files/TV/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/share/TV Shows/" -non-strict -no-xattr
-find "/mnt/files/TV/" -empty -type d -delete
+if [ -d "/mnt/files/Queue/TV/" ]; then
+  echo Processing TV Shows...
+  /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/mnt/files/Queue/TV/" >/dev/null
+  /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/TV/" -r --format "{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/files/TV/" -non-strict
+  ls /mnt/files/TV
+  echo ...
+  /opt/plexity-filebot/filebot.sh -rename "/mnt/files/TV/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/share/TV Shows/" -non-strict -no-xattr
+  find "/mnt/files/TV/" -empty -type d -delete
+fi
+find /mnt/files/Queue/ -empty -type d -delete
 
-#   Removing this section while I work on automatically decompressing archives.
-#echo "Checking /mnt/files/Trash for compressed files..."
-#if [ -f /mnt/files/Trash/*.zip ] ||  [ -f /mnt/files/Trash/*.rar ] ||  [ -f *.001 ]; then
-#  echo "Compressed files were found.  Please move or delete these so automatic trash cleanup can continue."
-#else
-#  echo "Cleaning /mnt/files/Trash..."
-#  /opt/plexity-filebot/filebot.sh -script fn:cleaner /mnt/files/Trash --def root=y
-#fi
-
-echo Complete
+echo Complete!
