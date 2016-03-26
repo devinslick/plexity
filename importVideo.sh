@@ -34,7 +34,6 @@ if [ -d "/mnt/files/Queue/Movies/" ]; then
   echo ...
   mv -n /mnt/files/Movies/* /mnt/share/Movies/ &> /dev/null
   find "/mnt/files/Movies/" -empty -type d -delete
-  echo Complete
 fi
 
 if [ -d "/mnt/files/Queue/TV/" ]; then
