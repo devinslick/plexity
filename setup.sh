@@ -5,6 +5,8 @@ if [ $installContinue = 'n' ]; then
   exit
 fi
 
+mkdir /var/plexity/
+
 echo "Creating new plexity service account..."
 adduser -g wheel plexity
 echo plexity:$(date +%s | sha256sum | base64 | head -c 32) | chpasswd
@@ -75,10 +77,10 @@ if [ $installTransmission = 'y' ]; then
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
   yum -y unzip java
   wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip?r=http%3A%2F%2Fwww.filebot.net%2F&ts=1449410469&use_mirror=iweb
-  mkdir -p /opt/filebot/
-  mv FileBot_4.6* /opt/filebot/
-  unzip /opt/filebot/FileBot_4.6* -d /opt/filebot/ -x *.exe
-  rm -rf /opt/filebot/*.zip
+  mkdir -p /opt/plexity-filebot/
+  mv FileBot_4.6* /opt/plexity-filebot/
+  unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
+  rm -rf /opt/plexity-filebot/*.zip
   echo "FileBot has been installed!"
 fi
 
@@ -101,15 +103,21 @@ if [ $installDeepSecurity = 'y' ]; then
   sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
 fi
 
-echo Importing scripts from github...
-cd /opt/
-git clone https://github.com/devinslick/plexity.git
+CURRENTPATH="`dirname \"$0\"`"
+if [ $CURRENTPATH='/opt/plexity' ];
+then
+  echo 'setup.sh is running from /opt/plexity/, skipping git clone...'
+  ;note to self, I should check repo here
+else
+  echo Importing scripts from github...
+  git clone https://github.com/devinslick/plexity.git /opt/plexity
+fi
+
 mkdir /var/plexity
 read -n 1 -p "Would you like to install the Plex Media Server on this machine? [y/n]: " installPlex
 if [ $installPlex = 'y' ]; then
   echo "Adding plexupdate scripts for automatic updates..."
-  mkdir /opt/plexupdate /var/plexupdate
-  git clone https://github.com/devinslick/plexupdate.git
+  git clone https://github.com/devinslick/plexupdate.git /opt/plexity-plexupdate/
   echo Installing Plex...
   echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
   read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
@@ -118,29 +126,29 @@ if [ $installPlex = 'y' ]; then
     read plexuser
     echo -n "Enter your PlexPass password: "
     read plexpassword
-    echo -e "EMAIL="$plexuser > '/var/plexupdate/settings.conf'
-    echo -e "PASS="$plexpassword >> '/var/plexupdate/settings.conf'
-    echo 'DOWNLOADDIR=.' >> '/var/plexupdate/settings.conf'
-    echo 'RELEASE=64' >> '/var/plexupdate/settings.conf'
-    echo 'KEEP=no' >> '/var/plexupdate/settings.conf'
-    echo 'FORCE=yes' >> '/var/plexupdate/settings.conf'
-    echo 'PUBLIC=no' >> '/var/plexupdate/settings.conf'
-    echo 'AUTOINSTALL=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTODELETE=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTOUPDATE=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTOSTART=yes' >> '/var/plexupdate/settings.conf'
-    ln -s /root/.plexupdate /var/plexupdate/settings.conf
+    echo -e "EMAIL="$plexuser > '/var/plexity/plexupdate.settings'
+    echo -e "PASS="$plexpassword >> '/var/plexity/plexupdate.settings'
+    echo 'DOWNLOADDIR=.' >> '/var/plexity/plexupdate.settings'
+    echo 'RELEASE=64' >> '/var/plexity/plexupdate.settings'
+    echo 'KEEP=no' >> '/var/plexity/plexupdate.settings'
+    echo 'FORCE=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'PUBLIC=no' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTOINSTALL=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTODELETE=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTOUPDATE=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTOSTART=yes' >> '/var/plexity/plexupdate.settings'
+    ln -s /root/.plexupdate /var/plexity/plexupdate.settings
   else
-    echo 'DOWNLOADDIR=.' > '/var/plexupdate/settings.conf'
-    echo 'RELEASE=64' >> '/var/plexupdate/settings.conf'
-    echo 'KEEP=no' >> '/var/plexupdate/settings.conf'
-    echo 'FORCE=yes' >> '/var/plexupdate/settings.conf'
-    echo 'PUBLIC=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTOINSTALL=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTODELETE=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTOUPDATE=yes' >> '/var/plexupdate/settings.conf'
-    echo 'AUTOSTART=yes' >> '/var/plexupdate/settings.conf'
-    ln -s /var/plexupdate/settings.conf /root/.plexupdate
+    echo 'DOWNLOADDIR=.' > '/var/plexity/plexupdate.settings'
+    echo 'RELEASE=64' >> '/var/plexity/plexupdate.settings'
+    echo 'KEEP=no' >> '/var/plexity/plexupdate.settings'
+    echo 'FORCE=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'PUBLIC=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTOINSTALL=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTODELETE=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTOUPDATE=yes' >> '/var/plexity/plexupdate.settings'
+    echo 'AUTOSTART=yes' >> '/var/plexity/plexupdate.settings'
+    ln -s /var/plexity/plexupdate.settings /root/.plexupdate
   fi
   echo "A network drive is often used to store Plex media files."
   echo "Example: \\192.168.1.2\Media"
