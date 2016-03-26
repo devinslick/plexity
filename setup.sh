@@ -104,38 +104,50 @@ git clone https://github.com/devinslick/plexity.git
 echo 
 read -n 1 -p "Would you like to install the Plex Media Server on this machine? [y/n]: " installPlex
 if [ $installPlex = 'y' ]; then
-   echo "Adding plexupdate scripts for automatic updates..."
-   git clone https://github.com/devinslick/plexupdate.git
-   echo Installing Plex...
-   echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
-   read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
-   if [ $plexpass = 'y' ]; then
-      echo "Enter your PlexPass username or email address: "
-      read plexuser
-      echo -n "Enter your PlexPass password: "
-      read plexpassword
-      echo -e "EMAIL="$plexuser > '/root/.plexupdate'
-      echo -e "PASS="$plexpassword >> '/root/.plexupdate'
-      echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
-      echo 'RELEASE=64' >> '/root/.plexupdate'
-      echo 'KEEP=no' >> '/root/.plexupdate'
-      echo 'FORCE=yes' >> '/root/.plexupdate'
-      echo 'PUBLIC=no' >> '/root/.plexupdate'
-      echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
-      echo 'AUTODELETE=yes' >> '/root/.plexupdate'
-      echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
-      echo 'AUTOSTART=yes' >> '/root/.plexupdate'
-   else
-      echo 'DOWNLOADDIR=.' > '/root/.plexupdate'
-      echo 'RELEASE=64' >> '/root/.plexupdate'
-      echo 'KEEP=no' >> '/root/.plexupdate'
-      echo 'FORCE=yes' >> '/root/.plexupdate'
-      echo 'PUBLIC=yes' >> '/root/.plexupdate'
-      echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
-      echo 'AUTODELETE=yes' >> '/root/.plexupdate'
-      echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
-      echo 'AUTOSTART=yes' >> '/root/.plexupdate'
-   fi
+  echo "Adding plexupdate scripts for automatic updates..."
+  git clone https://github.com/devinslick/plexupdate.git
+  echo Installing Plex...
+  echo "If you have a PlexPass this script can automatically download and install the latest PlexPass Plex Server build."
+  read -n 1 -p "Do you have a PlexPass (y/n)? " plexpass
+  if [ $plexpass = 'y' ]; then
+  echo "Enter your PlexPass username or email address: "
+    read plexuser
+    echo -n "Enter your PlexPass password: "
+    read plexpassword
+    echo -e "EMAIL="$plexuser > '/root/.plexupdate'
+    echo -e "PASS="$plexpassword >> '/root/.plexupdate'
+    echo 'DOWNLOADDIR=.' >> '/root/.plexupdate'
+    echo 'RELEASE=64' >> '/root/.plexupdate'
+    echo 'KEEP=no' >> '/root/.plexupdate'
+    echo 'FORCE=yes' >> '/root/.plexupdate'
+    echo 'PUBLIC=no' >> '/root/.plexupdate'
+    echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+    echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+    echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+    echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+  else
+    echo 'DOWNLOADDIR=.' > '/root/.plexupdate'
+    echo 'RELEASE=64' >> '/root/.plexupdate'
+    echo 'KEEP=no' >> '/root/.plexupdate'
+    echo 'FORCE=yes' >> '/root/.plexupdate'
+    echo 'PUBLIC=yes' >> '/root/.plexupdate'
+    echo 'AUTOINSTALL=yes' >> '/root/.plexupdate'
+    echo 'AUTODELETE=yes' >> '/root/.plexupdate'
+    echo 'AUTOUPDATE=yes' >> '/root/.plexupdate'
+    echo 'AUTOSTART=yes' >> '/root/.plexupdate'
+  fi
+  echo "A network drive is often used to store Plex media files."
+  echo "Example: \\192.168.1.2\Media"
+  echo "Note: if you press ENTER and do not enter a path then local storage will be used instead."
+  echo "Please enter the path to your media share: "
+  read networklocation
+  if [ ${#networklocation} -ge 5 ]
+  then
+    echo $networklocation > /var/plexity/nas.path
+    echo "Your media share location was saved to /var/plexity/nas.path"
+  else
+    echo "No network path entered.    Assuming local storage."
+  fi
 fi
 
 echo Setting up cronjobs...
