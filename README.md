@@ -1,5 +1,17 @@
-# plexity
-Plex/CentOS automation toolkit
+Plexity - CentOS Automation and Management Solution
+
+Background: This repo was originally designed to allow easier scheduling of update tasks on a CentOS 7 (x64) Plex Media Server. While yum-cron has excellent use-cases, I was unable to find a way to use it to schedule conditional installation of updates. This script collection was intended to fill that gap, automatically installing updates as they are available and supported.
+Since then, I've added features and scripts intended more for desktop use.   
+
+Disclaimer: I take no responsibility for the impact these scripts may have on your system(s).  While I use them to manage my own devices, they may have unintended results on your systems.  Please make sure you read and understand these scripts before you begin using them.   While cloning this repo to your local system IS the recommended installation procedure, this carries its own inherent risks.  For security reasons I highly recommend forking this repo and reviewing any changes before merging them into your branch.
+
+Prerequisites: CentOS 7 (x64).  Package prerequisites should be installed automatically.  
+
+Installation: You may use the following command for installation.
+sudo git clone https://github.com/devinslick/plexity.git /opt/plexity && sudo /opt/plexity/setup.sh
+
+
+General information on each script:
 
 
 README.md                   You're reading it now.
