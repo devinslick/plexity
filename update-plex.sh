@@ -1,3 +1,2 @@
 #!/bin/bash
-sudo /opt/plexupdate/plexupdate.sh | /opt/plexity/notify.sh
-
+sudo /opt/plexity-plexupdate/plexupdate.sh | /opt/plexity/notify.sh
