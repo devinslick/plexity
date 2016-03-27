@@ -41,7 +41,7 @@ fi
 
 if [ -d "/mnt/files/Queue/TV/" ]; then
   echo Identifying TV Shows...
-  find "/mnt/files/Queue/TV Shows/"
+  find "/mnt/files/Queue/TV/"
   echo ...
   /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/mnt/files/Queue/TV/" >/dev/null
   /opt/plexity-filebot/filebot.sh -rename "/mnt/files/Queue/TV/" -r --format "{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/files/TV/" -non-strict
