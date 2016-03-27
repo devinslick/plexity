@@ -36,7 +36,6 @@ if [ -d "/mnt/files/Queue/Movies/" ]; then
   ls /mnt/files/Movies
   echo ...
   mv -n /mnt/files/Movies/* /mnt/share/Movies/ &> /dev/null
-  find "/mnt/files/Movies/" -empty -type d -delete
 fi
 
 if [ -d "/mnt/files/Queue/TV/" ]; then
@@ -49,7 +48,8 @@ if [ -d "/mnt/files/Queue/TV/" ]; then
   ls /mnt/files/TV
   echo ...
   /opt/plexity-filebot/filebot.sh -rename "/mnt/files/TV/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/mnt/share/TV Shows/" -non-strict -no-xattr
-  find "/mnt/files/TV/" -empty -type d -delete
 fi
+find "/mnt/files/Movies/" -empty -type d -delete
+find "/mnt/files/TV/" -empty -type d -delete
 find /mnt/files/Queue/ -empty -type d -delete
 echo Complete!
