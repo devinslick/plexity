@@ -137,7 +137,7 @@ if [ $installPlex = 'y' ]; then
     echo 'AUTODELETE=yes' >> '/var/plexity/plexupdate.settings'
     echo 'AUTOUPDATE=yes' >> '/var/plexity/plexupdate.settings'
     echo 'AUTOSTART=yes' >> '/var/plexity/plexupdate.settings'
-    ln -s /root/.plexupdate /var/plexity/plexupdate.settings
+    ln -s /var/plexity/plexupdate.settings /root/.plexupdate
   else
     echo 'DOWNLOADDIR=.' > '/var/plexity/plexupdate.settings'
     echo 'RELEASE=64' >> '/var/plexity/plexupdate.settings'
@@ -162,8 +162,11 @@ if [ $installPlex = 'y' ]; then
   else
     echo "No network path entered.    Assuming local storage."
   fi
+  echo Installing plex media server
+  /opt/plexity-plexupdate/plexupdate.sh
 fi
 
+
 echo Setting up cronjobs...
-sh /opt/plexity/update-crontab.sh
+/opt/plexity/update-crontab.sh
 echo Done
