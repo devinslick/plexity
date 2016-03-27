@@ -14,8 +14,6 @@ sed -i 's/Defaults:root !requiretty/#Defaults:root !requiretty/g' /etc/sudoers /
 sed -i 's/root    ALL=(ALL)       ALL/%wheel    ALL=(ALL)       ALL/g' /etc/sudoers /etc/sudoers
 sed -i 's/# %wheel/%wheel/g' /etc/sudoers /etc/sudoers
 
-yum -y update
-
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
 
 echo "Installing server prerequisites and dependencies..."
@@ -166,7 +164,12 @@ if [ $installPlex = 'y' ]; then
   /opt/plexity-plexupdate/plexupdate.sh
 fi
 
-
 echo Setting up cronjobs...
 /opt/plexity/update-crontab.sh
 echo Done
+
+echo Finalizing updates, will restart if necessary...
+yum -y update
+if [ $installDeepSecurity = 'y' ]; then
+  /opt/plexity/ds_kernel.sh
+fi
