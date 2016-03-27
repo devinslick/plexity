@@ -157,6 +157,9 @@ if [ $installPlex = 'y' ]; then
   then
     echo $networklocation > /var/plexity/nas.path
     echo "Your media share location was saved to /var/plexity/nas.path"
+    mkdir '/media/share'
+    echo '//192.168.1.2/Public /media/share cifs username=guest,uid=1002,gid=1001,iocharset=utf8,file_mode=0777,dir_mode=0777 0 0' >> /etc/fstab
+    mount -a
   else
     echo "No network path entered.    Assuming local storage."
   fi
