@@ -96,9 +96,13 @@ if [ $installDeepSecurity = 'y' ]; then
   wget https://$dsm:4119/software/agent/RedHat_EL7/x86_64/ -O /tmp/agent.rpm --no-check-certificate --quiet
   rpm -ihv /tmp/agent.rpm
   /opt/ds_agent/dsa_control -a dsm://$dsm:4120/
+  sleep 15
   chkconfig iptables off
-  systemctl stop firewalld, systemctl disable firewalld
+  systemctl stop firewalld
+  systemctl disable firewalld
   sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
+  /opt/ds_agent/dsa_control -r
+  /opt/ds_agent/dsa_control -a dsm://$dsm:4120/  
 fi
 
 CURRENTPATH="`dirname \"$0\"`"
