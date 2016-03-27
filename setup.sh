@@ -109,13 +109,11 @@ CURRENTPATH="`dirname \"$0\"`"
 if [ $CURRENTPATH='/opt/plexity' ];
 then
   echo 'setup.sh is running from /opt/plexity/, skipping git clone...'
-  ;note to self, I should check repo here
 else
   echo Importing scripts from github...
   git clone https://github.com/devinslick/plexity.git /opt/plexity
 fi
 
-mkdir /var/plexity
 read -n 1 -p "Would you like to install the Plex Media Server on this machine? [y/n]: " installPlex
 if [ $installPlex = 'y' ]; then
   echo "Adding plexupdate scripts for automatic updates..."
