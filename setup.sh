@@ -77,7 +77,9 @@ if [ $installTransmission = 'y' ]; then
   unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
   rm -rf /opt/plexity-filebot/*.zip
   ln -s /var/lib/transmission/.config/transmission-daemon/settings.json /var/plexity/transmission.settings
-  echo "FileBot has been installed!"
+  systemctl stop transmission-daemon
+  sed -i 's/127.0.0.1/*/g' /etc/sudoers /var/plexity/transmission.settings
+  systemctl start transmission-daemon
 fi
 
 echo "Trend Micro Deep Security..."
