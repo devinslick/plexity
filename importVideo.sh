@@ -52,15 +52,6 @@ echo ...
 sudo /opt/plexity-filebot/filebot.sh -rename "/media/files/TV/" -r --format "{n}/Season {s}/{n} - S{s.pad(2)}E{e.pad(2)} - {t}" --output "/media/share/TV Shows/" -non-strict -no-xattr
 find "/media/files/TV/" -empty -type d -delete
 
-#   Removing this section while I work on automatically decompressing archives.
-#echo "Checking /media/files/Trash for compressed files..."
-#if [ -f /media/files/Trash/*.zip ] ||  [ -f /media/files/Trash/*.rar ] ||  [ -f *.001 ]; then
-#  echo "Compressed files were found.  Please move or delete these so automatic trash cleanup can continue."
-#else
-#  echo "Cleaning /media/files/Trash..."
-#  /opt/plexity-filebot/filebot.sh -script fn:cleaner /media/files/Trash --def root=y
-#fi
-
 echo Complete
 
 find /media/files/Queue/ -empty -type d -delete
