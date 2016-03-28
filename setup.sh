@@ -78,7 +78,12 @@ if [ $installTransmission = 'y' ]; then
   rm -rf /opt/plexity-filebot/*.zip
   ln -s /var/lib/transmission/.config/transmission-daemon/settings.json /var/plexity/transmission.settings
   systemctl stop transmission-daemon
-  sed -i 's/127.0.0.1/*/g' /etc/sudoers /var/plexity/transmission.settings
+  mkdir -p /media/files/Complete
+  mkdir -p /media/files/Incomplete
+  sed -i 's|"rpc-whitelist-enabled": true,|"rpc-whitelist-enabled": false,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Complete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Incomplete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"incomplete-dir-enabled": false,|"incomplete-dir-enabled": true,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
   systemctl start transmission-daemon
 fi
 
