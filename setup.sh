@@ -66,7 +66,7 @@ fi
 read -n 1 -p "Would you like to install Transmission for torrenting? [y/n]: " installTransmission
 if [ $installTransmission = 'y' ]; then
   echo Installing transmission...
-  yum -y install epel-* transmission transmission-daemon unzip
+  yum -y install epel-* transmission transmission-daemon unzip unrar
   chkconfig transmission-daemon on
   echo "FileBot is a tool used to help automate renaming media."
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
