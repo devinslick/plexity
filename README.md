@@ -18,7 +18,7 @@ README.md                   You're reading it now.
 
 camera-snap-all.sh          Takes pictures of configured security cameras.
                             Looks for files in the following format:
-                               /etc/[Room/zone name].camera
+                               /var/plexity/[Room/zone name].camera
                             These files should contain one line: the full http path to get an image from the camera.
                             My foscam camera uses the following format:
                             http://[ip address]:88/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=[username]&pwd=[password]
@@ -39,10 +39,10 @@ getResolution.sh            This script gets the resolution of the movie passed 
 importMovieWithResolution.sh   Imports movies from /mnt/files/Complete/.  It checks first for resolution defined in the file's name, then uses ffprobe to check the rest.   It moves them to /mnt/files/Movies while updating their metadata and then moves them to /mnt/share/Movies afterwards.  This is done to avoid the xattr errors given when attempting to update metadata over NFS shares.
 
 
-notify.sh                   Reads /etc/emailaddress, /etc/pushover.user.key, and /etc/pushover.api.key.  If all of this information is available it will default to sending a pushover app notification using the user and api keys.   If only the user key was provided then an email will be sent to the user@api.pushover.net.  If only the email address was provided, this will be used.    Sends all parameters as an alert.   Example: ./notify.sh Send me an alert!
+notify.sh                   Reads /var/plexity/emailaddress, /var/plexity/pushover.user.key, and /var/plexity/pushover.api.key.  If all of this information is available it will default to sending a pushover app notification using the user and api keys.   If only the user key was provided then an email will be sent to the user@api.pushover.net.  If only the email address was provided, this will be used.    Sends all parameters as an alert.   Example: ./notify.sh Send me an alert!
 Example 2: tail /var/log/messages | ./notify.sh
 
-setup.sh                    Asks questions in order to install appropriate packages, add configuration files, and setup cron jobs.   It will not setup your hostname, IP address, or /etc/*.camera files.
+setup.sh                    Asks questions in order to install appropriate packages, add configuration files, and setup cron jobs.   It will not setup your hostname, IP address, or /var/plexity/*.camera files.
 
 update-centos.sh            Uses yum to install updates.   It will never install kernel updates if you have the Deep Security Agent installed.  
 

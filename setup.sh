@@ -14,8 +14,6 @@ sed -i 's/Defaults:root !requiretty/#Defaults:root !requiretty/g' /etc/sudoers /
 sed -i 's/root    ALL=(ALL)       ALL/%wheel    ALL=(ALL)       ALL/g' /etc/sudoers /etc/sudoers
 sed -i 's/# %wheel/%wheel/g' /etc/sudoers /etc/sudoers
 
-yum -y update
-
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
 
 echo "Installing server prerequisites and dependencies..."
@@ -68,20 +66,25 @@ fi
 read -n 1 -p "Would you like to install Transmission for torrenting? [y/n]: " installTransmission
 if [ $installTransmission = 'y' ]; then
   echo Installing transmission...
-  yum -y install epel-* transmission transmission-daemon
+  yum -y install epel-* transmission transmission-daemon unzip
   chkconfig transmission-daemon on
-fi
-
-if [ $installTransmission = 'y' ]; then
   echo "FileBot is a tool used to help automate renaming media."
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
-  yum -y unzip java
-  wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip?r=http%3A%2F%2Fwww.filebot.net%2F&ts=1449410469&use_mirror=iweb
+  yum -y install java
+  wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip
   mkdir -p /opt/plexity-filebot/
   mv FileBot_4.6* /opt/plexity-filebot/
   unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
   rm -rf /opt/plexity-filebot/*.zip
-  echo "FileBot has been installed!"
+  ln -s /var/lib/transmission/.config/transmission-daemon/settings.json /var/plexity/transmission.settings
+  systemctl stop transmission-daemon
+  mkdir -p /media/files/Complete
+  mkdir -p /media/files/Incomplete
+  sed -i 's|"rpc-whitelist-enabled": true,|"rpc-whitelist-enabled": false,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Complete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Incomplete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"incomplete-dir-enabled": false,|"incomplete-dir-enabled": true,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  systemctl start transmission-daemon
 fi
 
 echo "Trend Micro Deep Security..."
@@ -98,22 +101,24 @@ if [ $installDeepSecurity = 'y' ]; then
   wget https://$dsm:4119/software/agent/RedHat_EL7/x86_64/ -O /tmp/agent.rpm --no-check-certificate --quiet
   rpm -ihv /tmp/agent.rpm
   /opt/ds_agent/dsa_control -a dsm://$dsm:4120/
+  sleep 15
   chkconfig iptables off
-  systemctl stop firewalld, systemctl disable firewalld
+  systemctl stop firewalld
+  systemctl disable firewalld
   sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
+  /opt/ds_agent/dsa_control -r
+  /opt/ds_agent/dsa_control -a dsm://$dsm:4120/  
 fi
 
 CURRENTPATH="`dirname \"$0\"`"
 if [ $CURRENTPATH='/opt/plexity' ];
 then
   echo 'setup.sh is running from /opt/plexity/, skipping git clone...'
-  ;note to self, I should check repo here
 else
   echo Importing scripts from github...
   git clone https://github.com/devinslick/plexity.git /opt/plexity
 fi
 
-mkdir /var/plexity
 read -n 1 -p "Would you like to install the Plex Media Server on this machine? [y/n]: " installPlex
 if [ $installPlex = 'y' ]; then
   echo "Adding plexupdate scripts for automatic updates..."
@@ -137,7 +142,7 @@ if [ $installPlex = 'y' ]; then
     echo 'AUTODELETE=yes' >> '/var/plexity/plexupdate.settings'
     echo 'AUTOUPDATE=yes' >> '/var/plexity/plexupdate.settings'
     echo 'AUTOSTART=yes' >> '/var/plexity/plexupdate.settings'
-    ln -s /root/.plexupdate /var/plexity/plexupdate.settings
+    ln -s /var/plexity/plexupdate.settings /root/.plexupdate
   else
     echo 'DOWNLOADDIR=.' > '/var/plexity/plexupdate.settings'
     echo 'RELEASE=64' >> '/var/plexity/plexupdate.settings'
@@ -159,11 +164,22 @@ if [ $installPlex = 'y' ]; then
   then
     echo $networklocation > /var/plexity/nas.path
     echo "Your media share location was saved to /var/plexity/nas.path"
+    mkdir '/media/share'
+    echo '//192.168.1.2/Public /media/share cifs username=guest,uid=1002,gid=1001,iocharset=utf8,file_mode=0777,dir_mode=0777 0 0' >> /etc/fstab
+    mount -a
   else
     echo "No network path entered.    Assuming local storage."
   fi
+  echo Installing plex media server
+  /opt/plexity-plexupdate/plexupdate.sh
 fi
 
 echo Setting up cronjobs...
-sh /opt/plexity/update-crontab.sh
+/opt/plexity/update-crontab.sh
 echo Done
+
+echo Finalizing updates, will restart if necessary...
+yum -y update
+if [ $installDeepSecurity = 'y' ]; then
+  /opt/plexity/ds_kernel.sh
+fi
