@@ -8,7 +8,7 @@ Disclaimer: I take no responsibility for the impact these scripts may have on yo
 Prerequisites: CentOS 7 (x64).  Package prerequisites should be installed automatically.  
 
 Installation: You may use the following command for installation.
-sudo git clone https://github.com/devinslick/plexity.git /opt/plexity && sudo /opt/plexity/setup.sh
+sudo yum -y install git && sudo git clone https://github.com/devinslick/plexity.git /opt/plexity && sudo /opt/plexity/setup.sh
 
 
 General information on each script:
