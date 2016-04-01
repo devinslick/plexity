@@ -77,10 +77,12 @@ if [ $installTransmission = 'y' ]; then
   unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
   rm -rf /opt/plexity-filebot/*.zip
   ln -s /var/lib/transmission/.config/transmission-daemon/settings.json /var/plexity/transmission.settings
-  systemctl stop transmission-daemon
   mkdir -p /media/files/Complete
   mkdir -p /media/files/Incomplete
   chmod -R 777 /media/files/
+  sleep 3
+  systemctl stop transmission-daemon
+  sleep 2
   sed -i 's|"rpc-whitelist-enabled": true,|"rpc-whitelist-enabled": false,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
   sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Complete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
   sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Incomplete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
