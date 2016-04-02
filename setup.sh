@@ -84,9 +84,9 @@ if [ $installTransmission = 'y' ]; then
   systemctl stop transmission-daemon
   sleep 2
   sed -i 's|"rpc-whitelist-enabled": true,|"rpc-whitelist-enabled": false,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
+  sed -i 's|"incomplete-dir-enabled": false,|"incomplete-dir-enabled": true,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
   sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Complete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
   sed -i 's|"/var/lib/transmission/Downloads"|"/media/files/Incomplete"|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
-  sed -i 's|"incomplete-dir-enabled": false,|"incomplete-dir-enabled": true,|g' /var/lib/transmission/.config/transmission-daemon/settings.json /var/lib/transmission/.config/transmission-daemon/settings.json
   systemctl start transmission-daemon
 fi
 
