@@ -41,5 +41,5 @@ then
   #update plexmediaserver at 4:30am
   (crontab -u plexity -l ; echo "30 3 * * * /opt/plexity/update-plex.sh") | crontab -u plexity -
 fi
-echo -e "\nCrontab has been updated:"
+echo -e '\n'$(date +'%b %d') "Plexity crontab has been updated." | tee -a /var/log/plexity/today.log
 crontab -u plexity -l
