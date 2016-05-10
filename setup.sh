@@ -71,7 +71,9 @@ if [ $installTransmission = 'y' ]; then
   echo "FileBot is a tool used to help automate renaming media."
   echo "Since you chose to install Transmission, I'll go ahead and install FileBot for you as well.  You're welcome!"
   yum -y install java
-  wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip
+  wget http://iweb.dl.sourceforge.net/project/filebot/filebot/FileBot_4.6/FileBot_4.6-portable.zip
+  #wget http://iweb.dl.sourceforge.net/project/filebot/filebot/FileBot_4.7/FileBot_4.7-portable.zip
+  #4.7 is not working yet but will be added soon
   mkdir -p /opt/plexity-filebot/
   mv FileBot_4.6* /opt/plexity-filebot/
   unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
