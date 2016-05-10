@@ -4,8 +4,13 @@ dsagent=$(yum info ds_agent.x86_64 | grep "Repo        : installed")
 if [[ $dsagent == *"installed"* ]]
 then
    echo "Skipping kernel updates since the Deep Security Agent is installed"
-   yum -y -e 0 -x 'kernel*' update
+   result=$(yum -y -e 0 -x 'kernel*' update)
 else
-   yum -y -e 0 update
+   result=$(yum -y -e 0 update)
 fi
 
+echo -e $(date '+%Y%m%d%H%m')'\tUpdating CentOS packages' >> /var/plexity/$(date '+%Y%m%d').log
+
+# if contains 'Error downloading packages:' then possible network connectivity issue
+
+echo $result >> /var/plexity/$(date '+%Y%m%d').log
