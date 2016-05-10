@@ -14,15 +14,15 @@ RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
 RESULTS=$(sed 's/.x86_64/ /g' <<<"$RESULTS")
 if [[ $installed == "$RESULTS" ]]
 then
-  echo "You are already running the latest supported CentOS 7 kernel."
+  echo $(date +'%b %d') " You are running the latest Trend Micro supported CentOS 7 kernel." | tee -a /var/log/plexity/today.log
 else
   echo Attempting to install CentOS 7 kernel: $RESULTS
   install=$(yum -y install kernel-$RESULTS)
   if [[ $install == *"Nothing to do"* ]]
   then
-    echo "I've attempted to install a kernel but there was nothing to do."
+    echo $(date +'%b %d') " Kernel installation was attempted but there was nothing to do." | tee -a /var/log/plexity/today.log
   else
-    echo "Your kernel was updated - time to reboot!"
+    echo $(date +'%b %d') " Kernel updated, initiating reboot!" | tee -a /var/log/plexity/today.log
     shutdown -r +1 "Server is rebooting for kernel upgrade." 
   fi
 fi

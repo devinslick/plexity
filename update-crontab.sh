@@ -37,7 +37,7 @@ fi
 if [[ $plexmediaserver == *"installed"* ]]
 then
   #update filebot at 2:30am
-  (crontab -u plexity -l ; echo "30 2 * * * /opt/plexity-filebot/update-filebot.sh | /opt/plexity/notify.sh") | crontab -u plexity -
+  (crontab -u plexity -l ; echo "30 2 * * * /opt/plexity-filebot/update-filebot.sh") | crontab -u plexity -
   #update plexmediaserver at 4:30am
   (crontab -u plexity -l ; echo "30 3 * * * /opt/plexity/update-plex.sh") | crontab -u plexity -
 fi

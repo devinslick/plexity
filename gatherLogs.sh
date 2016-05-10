@@ -1,3 +1,4 @@
 #!/bin/bash
-cat /var/log/yum.log | grep "$today" | /opt/plexity/notify.sh
+today=$(date +'%b %d')
+cat /var/log/yum.log | grep "$today" >> /var/log/plexity/today.lo
 
