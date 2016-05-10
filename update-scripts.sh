@@ -7,7 +7,8 @@ OUTPUT="$(git pull -f)"
 
 if [[ $OUTPUT == *"Already up-to-date"* ]]
 then
-   echo "No changes have been made to the repository, no update necessary."
+   echo $(date +'%b %d') " Plexity script update is already up to date" | tee -a /var/log/plexity/today.log
 else
-   echo "Update complete!"
+   echo $(date +'%b %d') " Plexity script update complete!" | tee -a /var/log/plexity/today.log
 fi
+
