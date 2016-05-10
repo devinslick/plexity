@@ -9,7 +9,7 @@ else
    result=$(yum -y -e 0 update)
 fi
 
-echo -e $(date '+%Y%m%d%H%m')'\tUpdating CentOS packages' >> /var/plexity/$(date '+%Y%m%d').log
+echo -e $(date +'%b %d %H:%m:%M')' Updating CentOS packages' >> /var/plexity/$(date '+%Y%m%d').log
 
 # if contains 'Error downloading packages:' then possible network connectivity issue
 
