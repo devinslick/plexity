@@ -20,9 +20,9 @@ else
   install=$(yum -y install kernel-$RESULTS)
   if [[ $install == *"Nothing to do"* ]]
   then
-    echo $(date +'%b %d') " Kernel installation was attempted but there was nothing to do." | tee -a /var/log/plexity/today.log
+    echo $(date +'%b %d %H:%m:%M') " Kernel installation was attempted but there was nothing to do." | tee -a /var/log/plexity/today.log
   else
-    echo $(date +'%b %d') " Kernel updated, initiating reboot!" | tee -a /var/log/plexity/today.log
+    echo $(date +'%b %d %H:%m:%M') " Kernel updated, initiating reboot!" | tee -a /var/log/plexity/today.log
     shutdown -r +1 "Server is rebooting for kernel upgrade." 
   fi
 fi
