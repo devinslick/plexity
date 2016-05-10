@@ -5,7 +5,7 @@ if [ $installContinue = 'n' ]; then
   exit
 fi
 
-mkdir /var/plexity/
+mkdir -p /var/plexity/ /var/log/plexity /opt/plexity-filebot/
 
 echo "Creating new plexity service account..."
 adduser -g wheel plexity
@@ -74,7 +74,6 @@ if [ $installTransmission = 'y' ]; then
   wget http://iweb.dl.sourceforge.net/project/filebot/filebot/FileBot_4.6/FileBot_4.6-portable.zip
   #wget http://iweb.dl.sourceforge.net/project/filebot/filebot/FileBot_4.7/FileBot_4.7-portable.zip
   #4.7 is not working yet but will be added soon
-  mkdir -p /opt/plexity-filebot/
   mv FileBot_4.6* /opt/plexity-filebot/
   unzip /opt/plexity-filebot/FileBot_4.6* -d /opt/plexity-filebot/ -x *.exe
   rm -rf /opt/plexity-filebot/*.zip
