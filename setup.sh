@@ -6,6 +6,7 @@ if [ $installContinue = 'n' ]; then
 fi
 
 mkdir -p /var/plexity/ /var/log/plexity /opt/plexity-filebot/
+chmod 775 /var/log/plexity
 
 echo "Creating new plexity service account..."
 adduser -g wheel plexity
