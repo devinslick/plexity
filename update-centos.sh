@@ -8,4 +8,4 @@ then
 else
    sudo yum -y -e 0 update
 fi
-echo -e $(date +'%b %d %H:%m:%M')' Updating CentOS packages' >> /var/log/plexity/$(date '+%Y%m%d').log
+echo -e $(date +'%b %d %H:%M:%S')' Updating CentOS packages' >> /var/log/plexity/$(date '+%Y%m%d').log
