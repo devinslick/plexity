@@ -14,7 +14,7 @@ RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
 RESULTS=$(sed 's/.x86_64/ /g' <<<"$RESULTS")
 if [[ $installed == "$RESULTS" ]]
 then
-  echo $(date +'%b %d') " You are running the latest Trend Micro supported CentOS 7 kernel." | tee -a /var/log/plexity/today.log
+  echo $(date +'%b %d %H:%m:%M')" You are running the latest Trend Micro supported CentOS 7 kernel." | tee -a /var/log/plexity/today.log
 else
   echo Attempting to install CentOS 7 kernel: $RESULTS
   install=$(yum -y install kernel-$RESULTS)
