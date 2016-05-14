@@ -9,6 +9,7 @@ mkdir -p /var/plexity/ /var/log/plexity /opt/plexity-filebot/
 chmod 775 /var/log/plexity
 chmod g+s /var/log/plexity 
 setfacl -d -m g::rwx /var/log/plexity
+setfacl -d -m o::rWx /var/log/plexity
 
 echo "Creating new plexity service account..."
 adduser -g wheel plexity
