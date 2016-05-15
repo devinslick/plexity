@@ -15,6 +15,7 @@ echo "Creating new plexity service account..."
 adduser -g wheel plexity
 echo plexity:$(date +%s | sha256sum | base64 | head -c 32) | chpasswd
 sed -i 's/Defaults:root !requiretty/#Defaults:root !requiretty/g' /etc/sudoers /etc/sudoers
+sed -i 's/Defaults    requiretty/#Defaults    requiretty/g' /etc/sudoers /etc/sudoers
 sed -i 's/root    ALL=(ALL)       ALL/%wheel    ALL=(ALL)       ALL/g' /etc/sudoers /etc/sudoers
 sed -i 's/# %wheel/%wheel/g' /etc/sudoers /etc/sudoers
 
