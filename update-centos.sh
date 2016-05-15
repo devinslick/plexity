@@ -5,7 +5,7 @@ echo -e $(date +'%b %d %H:%M:%S')' Updating CentOS packages...' >> /var/log/plex
 if [[ $dsagent == *"installed"* ]]
 then
    echo "Skipping kernel updates since the Deep Security Agent is installed"
-   sudo yum -y -e 0 -x 'kernel*'
+   sudo yum -y -e 0 update -x 'kernel*'
 else
    sudo yum -y -e 0 update
 fi
