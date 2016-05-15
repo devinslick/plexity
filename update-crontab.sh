@@ -11,36 +11,36 @@ plexmediaserver=$(yum info plexmediaserver.x86_64 | grep "Repo        : installe
 if [[ $dsagent == *"installed"* ]]
 then
   #send a heartbeat to the Deep Security Manager every 30 minutes.
-  echo "*/30 * * * * /opt/ds_agent/dsa_control -m >> /dev/null 2>&1" | crontab -u plexity -
+  echo "*/30 * * * * /opt/ds_agent/dsa_control -m >> /dev/null 2>&1" | sudo crontab -u plexity -
 fi
 
 #update scripts at 2:00am
-(crontab -u plexity -l ; echo "0 2 * * * /opt/plexity/update-scripts.sh") | crontab -u plexity -
+(sudo crontab -u plexity -l ; echo "0 2 * * * /opt/plexity/update-scripts.sh") | sudo crontab -u plexity -
 
 #rebuild cronjobs at 2:15am
-(crontab -u plexity -l ; echo "15 2 * * * /opt/plexity/update-crontab.sh") | crontab -u plexity -
+(sudo crontab -u plexity -l ; echo "15 2 * * * /opt/plexity/update-crontab.sh") | sudo crontab -u plexity -
 
 if [[ $dsagent == *"installed"* ]]
 then
   #update packages other than kernel at 3:30am
-  (crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | crontab -u plexity -
+  (sudo crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | sudo crontab -u plexity -
 else
-  (crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | crontab -u plexity -
+  (sudo crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | sudo crontab -u plexity -
 fi
 
 if [[ $dsagent == *"installed"* ]]
 then
   #update the kernel to the latest supported by Deep Security at 4am
-  (crontab -u plexity -l ; echo "0 3 * * * /opt/plexity/ds_kernel.sh") | crontab -u plexity -
+  (sudo crontab -u plexity -l ; echo "0 3 * * * /opt/plexity/ds_kernel.sh") | sudo crontab -u plexity -
 fi
 
 if [[ $plexmediaserver == *"installed"* ]]
 then
   #update filebot at 2:30am
-  (crontab -u plexity -l ; echo "30 2 * * * /opt/plexity-filebot/update-filebot.sh") | crontab -u plexity -
+  (sudo crontab -u plexity -l ; echo "30 2 * * * /opt/plexity-filebot/update-filebot.sh") | sudo crontab -u plexity -
   #update plexmediaserver at 4:30am
-  (crontab -u plexity -l ; echo "30 3 * * * /opt/plexity/update-plex.sh") | crontab -u plexity -
+  (sudo crontab -u plexity -l ; echo "30 3 * * * /opt/plexity/update-plex.sh") | sudo crontab -u plexity -
 fi
-(crontab -u plexity -l ; echo "0 4 * * * /opt/plexity/gatherLogs.sh") | crontab -u plexity -
+(sudo crontab -u plexity -l ; echo "0 4 * * * /opt/plexity/gatherLogs.sh") | sudo crontab -u plexity -
 echo -e '\n'$(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." | tee -a /var/log/plexity/$(date '+%Y%m%d').log
-crontab -u plexity -l
+sudo crontab -u plexity -l
