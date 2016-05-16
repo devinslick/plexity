@@ -42,5 +42,5 @@ then
   (sudo crontab -u plexity -l ; echo "30 3 * * * /opt/plexity/update-plex.sh") | sudo crontab -u plexity -
 fi
 (sudo crontab -u plexity -l ; echo "0 4 * * * /opt/plexity/gatherLogs.sh") | sudo crontab -u plexity -
-echo -e '\n'$(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." | tee -a /var/log/plexity/$(date '+%Y%m%d').log
+echo -e $(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." | tee -a /var/log/plexity/$(date '+%Y%m%d').log
 sudo crontab -u plexity -l
