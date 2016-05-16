@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Updating CentOS packages on "$HOSTNAME"..."
 dsagent=$(yum info ds_agent.x86_64 | grep "Repo        : installed")
-echo -e $(date +'%b %d %H:%M:%S')' Updating CentOS packages...' >> /var/log/plexity/$(date '+%Y%m%d').log
+echo -e $(date +'%b %d %H:%M:%S')' Checked for updates to CentOS packages' >> /var/log/plexity/$(date '+%Y%m%d').log
 if [[ $dsagent == *"installed"* ]]
 then
    echo "Skipping kernel updates since the Deep Security Agent is installed"
