@@ -19,6 +19,17 @@ sed -i 's/Defaults    requiretty/#Defaults    requiretty/g' /etc/sudoers /etc/su
 sed -i 's/root    ALL=(ALL)       ALL/%wheel    ALL=(ALL)       ALL/g' /etc/sudoers /etc/sudoers
 sed -i 's/# %wheel/%wheel/g' /etc/sudoers /etc/sudoers
 
+echo "Depending on your perimeter firewall, SSH will be allowed for all source addresses."
+echo "To connect from outside of your network you will need to use key-based authentication."
+cp -n /etc/ssh/sshd_config /etc/ssh/sshd_config.plexitybackup
+
+sed -i 's/PasswordAuthentication yes/#PasswordAuthentication yes/g' 
+echo PasswordAuthentication no >> /etc/ssh/sshd_config
+echo Match Address $(ip -o -f inet addr show | awk '/scope global/ {print $6}' | sed 's/255/0/g')/$(ip -o -f inet addr show | awk '/scope global/ 
+{print $4}' | cut -f 2 -d "/") >> /etc/ssh/sshd_config
+echo -e '\tPasswordAuthentication yes' >> /etc/ssh/sshd_config
+
+
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
 
 echo "Installing server prerequisites and dependencies..."
