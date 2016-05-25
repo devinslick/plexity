@@ -19,16 +19,18 @@ sed -i 's/Defaults    requiretty/#Defaults    requiretty/g' /etc/sudoers /etc/su
 sed -i 's/root    ALL=(ALL)       ALL/%wheel    ALL=(ALL)       ALL/g' /etc/sudoers /etc/sudoers
 sed -i 's/# %wheel/%wheel/g' /etc/sudoers /etc/sudoers
 
-echo "Depending on your perimeter firewall, SSH will be allowed for all source addresses."
-echo "To connect from outside of your network you will need to use key-based authentication."
-cp -n /etc/ssh/sshd_config /etc/ssh/sshd_config.plexitybackup
-
-sed -i 's/PasswordAuthentication yes/#PasswordAuthentication yes/g' 
-echo PasswordAuthentication no >> /etc/ssh/sshd_config
-echo Match Address $(ip -o -f inet addr show | awk '/scope global/ {print $6}' | sed 's/255/0/g')/$(ip -o -f inet addr show | awk '/scope global/ 
-{print $4}' | cut -f 2 -d "/") >> /etc/ssh/sshd_config
-echo -e '\tPasswordAuthentication yes' >> /etc/ssh/sshd_config
-
+if grep -q '#plexity' /etc/ssh/sshd_config; then
+  echo "SSH appears to have already been configured by plexity setup; skipping..."
+else
+  echo "Depending on your perimeter firewall, SSH will be allowed for all source addresses."
+  echo "To connect from outside of your network you will need to use key-based authentication."
+  cp -n /etc/ssh/sshd_config /etc/ssh/sshd_config.plexitybackup
+  sed -i 's/ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no    #plexity-no-cra/g' /etc/ssh/sshd_config
+  sed -i 's/PasswordAuthentication yes/#PasswordAuthentication yes  #plexity-pass-comment/g' /etc/ssh/sshd_config
+  echo "PasswordAuthentication no   #plexity-passauthno" >> /etc/ssh/sshd_config
+  echo -e 'Match Address '$(ip -o -f inet addr show | awk '/scope global/ {print $6}' | sed 's/255/0/g')/$(ip -o -f inet addr show | awk '/scope global/{print $4}' | cut -f 2 -d "/")' \t\t#plexity-matchaddr' >> /etc/ssh/sshd_config
+  echo -e '\tPasswordAuthentication yes\t#plexity-matchaddrpathauth' >> /etc/ssh/sshd_config
+fi
 
 grep -q ^flags.*\ hypervisor /proc/cpuinfo && echo "This machine is a virtual machine, installing VMware Tools..." && yum -y install open-vm-tools
 
