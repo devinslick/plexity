@@ -19,14 +19,7 @@ fi
 
 #rebuild cronjobs at 2:15am
 (sudo crontab -u plexity -l ; echo "15 2 * * * /opt/plexity/update-crontab.sh") | sudo crontab -u plexity -
-
-if [[ $dsagent == *"installed"* ]]
-then
-  #update packages other than kernel at 3:30am
-  (sudo crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | sudo crontab -u plexity -
-else
-  (sudo crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | sudo crontab -u plexity -
-fi
+(sudo crontab -u plexity -l ; echo "45 2 * * * /opt/plexity/update-centos.sh") | sudo crontab -u plexity -
 
 if [[ $dsagent == *"installed"* ]]
 then
