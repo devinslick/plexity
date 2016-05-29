@@ -34,7 +34,7 @@ function update-cronjobs
     (sudo crontab -u plexity -l ; echo "*/30 * * * * /opt/ds_agent/dsa_control -m >> /dev/null 2>&1") | sudo crontab -u plexity -
   fi
   #run this script every other hour
-  (sudo crontab -u plexity -l ; echo "0 */2 * * * /opt/plexity/update-scripts.sh") | sudo crontab -u plexity -
+  (sudo crontab -u plexity -l ; echo "0 */2 * * * /opt/plexity/update.sh") | sudo crontab -u plexity -
   echo -e $(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." | tee -a /var/log/plexity/$(date '+%Y%m%d').log
   sudo crontab -u plexity -l
 }
@@ -46,7 +46,7 @@ if [ -f /var/log/plexity/$(date '+%Y%m%d').log ]; then
   if grep -q "Logs sent" /var/log/plexity/$(date '+%Y%m%d').log; then
     exit
   else
-    /opt/plexity/gatherLogs.sh
+    cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
   fi
 #if a log file for today does not already exist...
 else 
@@ -67,6 +67,6 @@ else
     sudo grep -v plexmediaserver /var/log/yum.log | grep "$(date +'%b %d')" >> /var/log/plexity/$(date '+%Y%m%d').log
     /opt/plexity-filebot/update-filebot.sh
   fi
-  /opt/plexity/gatherLogs.sh
+  cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
   echo -e $(date +'%b %d %H:%M:%S')' Logs sent' >> /var/log/plexity/$(date '+%Y%m%d').log
 fi
