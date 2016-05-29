@@ -13,7 +13,6 @@ function dskernel
 {
   installed=$(uname -r)
   installed=$(sed 's/.x86_64/ /g' <<<"$installed")
-  echo "Running kernel: "$installed
   wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_kernels_EN.html"
   RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' Deep_Security_96_kernels_EN.html | grep -F '.' | tail -1) > /dev/null 2>&1
   rm -f Deep_Security_96_kernels_EN.html* > /dev/null 2>&1
@@ -40,13 +39,12 @@ function update-scripts
   cd /opt/plexity
   git reset HEAD > /dev/null 2>&1
   git checkout -- . > /dev/null 2>&1
-  echo "Updating Plexity from Github repository..."
   OUTPUT="$(sudo git pull -f)"
   if [[ $OUTPUT == *"Already up-to-date"* ]]
   then
-     echo $(date +'%b %d %H:%M:%S')" Plexity scripts are already up to date" | tee -a /var/log/plexity/$(date '+%Y%m%d').log
+     echo $(date +'%b %d %H:%M:%S')" Plexity scripts are already up to date" >> /var/log/plexity/$(date '+%Y%m%d').log
   else
-     echo $(date +'%b %d %H:%M:%S')" Plexity script update complete!" | tee -a /var/log/plexity/$(date '+%Y%m%d').log
+     echo $(date +'%b %d %H:%M:%S')" Plexity script update complete!" > /var/log/plexity/$(date '+%Y%m%d').log
   fi
 }
 
@@ -63,7 +61,6 @@ function update-cronjobs
   #run this script every other hour
   (sudo crontab -u plexity -l ; echo "0 */2 * * * /opt/plexity/update.sh") | sudo crontab -u plexity -
   echo -e $(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." | tee -a /var/log/plexity/$(date '+%Y%m%d').log
-  sudo crontab -u plexity -l
 }
 #
 
