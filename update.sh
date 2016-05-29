@@ -8,6 +8,33 @@ function check-installed
   plexmediaserver=$(yum list plexmediaserver)
 }
 
+#  Check for kernel updates compatible with the Trend Micro Deep Security Agent
+function dskernel
+{
+  installed=$(uname -r)
+  installed=$(sed 's/.x86_64/ /g' <<<"$installed")
+  echo "Running kernel: "$installed
+  wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_kernels_EN.html"
+  RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' Deep_Security_96_kernels_EN.html | grep -F '.' | tail -1) > /dev/null 2>&1
+  rm -f Deep_Security_96_kernels_EN.html* > /dev/null 2>&1
+  RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
+  RESULTS=$(sed 's/.x86_64/ /g' <<<"$RESULTS")
+  if [[ $installed == "$RESULTS" ]]
+  then
+    echo $(date +'%b %d %H:%M:%S')" You are running the latest kernel supported by Deep Security" >> /var/log/plexity/$(date '+%Y%m%d').log
+  else
+    echo Attempting to install CentOS 7 kernel: $RESULTS
+    install=$(sudo yum -y install kernel-$RESULTS)
+    if [[ $install == *"Nothing to do"* ]]
+    then
+      echo $(date +'%b %d %H:%M:%S') " Kernel installation was attempted but there was nothing to do." >> /var/log/plexity/$(date '+%Y%m%d').log
+    else
+      echo $(date +'%b %d %H:%M:%S') " Kernel updated from $installed to $RESULTS" >> /var/log/plexity/$(date '+%Y%m%d').log
+      shutdown -r +1 "Server is rebooting for kernel upgrade..." 
+    fi
+  fi
+}
+
 function update-scripts
 {
   cd /opt/plexity
@@ -57,7 +84,7 @@ else
     sudo sudo yum -y -e 0 update -x 'kernel*'
     sudo cat /var/log/yum.log | grep "$(date +'%b %d')" >> /var/log/plexity/$(date '+%Y%m%d').log
     echo -e $(date +'%b %d %H:%M:%S')' Checked for updates to CentOS packages' >> /var/log/plexity/$(date '+%Y%m%d').log
-    /opt/plexity/ds_kernel.sh
+    dskernel
   else
     sudo sudo yum -y -e 0 update
     sudo grep -v plexmediaserver /var/log/yum.log | grep "$(date +'%b %d %H')" >> /var/log/plexity/$(date '+%Y%m%d').log
