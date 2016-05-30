@@ -13,9 +13,9 @@ function dskernel
 {
   installed=$(uname -r)
   installed=$(sed 's/.x86_64/ /g' <<<"$installed")
-  wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_kernels_EN.html"
-  RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' Deep_Security_96_kernels_EN.html | grep -F '.' | tail -1) > /dev/null 2>&1
-  rm -f Deep_Security_96_kernels_EN.html* > /dev/null 2>&1
+  wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_kernels_EN.html" -O /tmp/dskernel.html
+  RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' /tmp/dskernel.html | grep -F '.' | tail -1) > /dev/null 2>&1
+  rm -f /tmp/dskernel.html > /dev/null 2>&1
   RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
   RESULTS=$(sed 's/.x86_64/ /g' <<<"$RESULTS")
   if [[ $installed == "$RESULTS" ]]
