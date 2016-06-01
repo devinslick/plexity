@@ -22,8 +22,10 @@ function dskernel
   then
     echo $(date +'%b %d %H:%M:%S')" You are running the latest kernel supported by Deep Security" >> /var/log/plexity/$(date '+%Y%m%d').log
   else
-    echo Attempting to install CentOS 7 kernel: $RESULTS
     install=$(sudo yum -y install kernel-$RESULTS)
+    #the following two lines are being used for troubleshooting and should be removed.
+    echo "$installed to $RESULTS" >> /var/log/plexity/$(date '+%Y%m%d')-kernel.log
+    echo $install >> /var/log/plexity/$(date '+%Y%m%d')-kernel.log
     if [[ $install == *"Nothing to do"* ]]
     then
       echo $(date +'%b %d %H:%M:%S') " Kernel installation was attempted but there was nothing to do." >> /var/log/plexity/$(date '+%Y%m%d').log
@@ -60,20 +62,20 @@ function update-cronjobs
   fi
   #run this script every other hour
   (sudo crontab -u plexity -l ; echo "0 */2 * * * /opt/plexity/update.sh") | sudo crontab -u plexity -
-  echo -e $(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." | tee -a /var/log/plexity/$(date '+%Y%m%d').log
+  echo -e $(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." >> /var/log/plexity/$(date '+%Y%m%d').log
 }
 #
 
 #if a log file today already exists...
-if [ -f /var/log/plexity/$(date '+%Y%m%d').log ]; then
+#if [ -f /var/log/plexity/$(date '+%Y%m%d').log ]; then
   #if file contains "Logs sent"
   if grep -q "Logs sent" /var/log/plexity/$(date '+%Y%m%d').log; then
     exit
-  else
-    cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
+#  else
+#    cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
   fi
 #if a log file for today does not already exist...
-else 
+#else 
   check-installed
   update-scripts
   update-cronjobs
@@ -93,4 +95,4 @@ else
   fi
   cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
   echo -e $(date +'%b %d %H:%M:%S')' Logs sent' >> /var/log/plexity/$(date '+%Y%m%d').log
-fi
+#fi
