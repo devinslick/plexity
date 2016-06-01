@@ -200,6 +200,11 @@ echo Setting up cronjobs...
 /opt/plexity/update-crontab.sh
 echo Done
 
+echo Settings timezone and timesource to NTP
+yum -y install ntp
+timedatectl set-timezone 'America/Chicago'
+timedatectl set-ntp yes
+
 echo Finalizing updates, will restart if necessary...
 yum -y update
 if [ $installDeepSecurity = 'y' ]; then
