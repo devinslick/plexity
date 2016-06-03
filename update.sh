@@ -64,35 +64,33 @@ function update-cronjobs
   (sudo crontab -u plexity -l ; echo "0 */2 * * * /opt/plexity/update.sh") | sudo crontab -u plexity -
   echo -e $(date +'%b %d %H:%M:%S') "Plexity crontab has been updated." >> /var/log/plexity/$(date '+%Y%m%d').log
 }
-#
 
-#if a log file today already exists...
-#if [ -f /var/log/plexity/$(date '+%Y%m%d').log ]; then
-  #if file contains "Logs sent"
-  if grep -q "Logs sent" /var/log/plexity/$(date '+%Y%m%d').log; then
-    exit
-#  else
-#    cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
-  fi
-#if a log file for today does not already exist...
-#else 
-  check-installed
-  update-scripts
-  update-cronjobs
-  if [[ $dsagent == *"installed"* ]]; then
-    sudo sudo yum -y -e 0 update -x 'kernel*'
-    sudo cat /var/log/yum.log | grep "$(date +'%b %d')" >> /var/log/plexity/$(date '+%Y%m%d').log
-    echo -e $(date +'%b %d %H:%M:%S')' Checked for updates to CentOS packages' >> /var/log/plexity/$(date '+%Y%m%d').log
-    dskernel
-  else
-    sudo sudo yum -y -e 0 update
-    sudo grep -v plexmediaserver /var/log/yum.log | grep "$(date +'%b %d %H')" >> /var/log/plexity/$(date '+%Y%m%d').log
-  fi
-  if [[ $plexmediaserver == *"installed"* ]]; then
-    sudo /opt/plexity-plexupdate/plexupdate.sh
-    sudo grep -v plexmediaserver /var/log/yum.log | grep "$(date +'%b %d')" >> /var/log/plexity/$(date '+%Y%m%d').log
-    /opt/plexity-filebot/update-filebot.sh
-  fi
-  cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
-  echo -e $(date +'%b %d %H:%M:%S')' Logs sent' >> /var/log/plexity/$(date '+%Y%m%d').log
-#fi
+if grep -q "Logs sent" /var/log/plexity/$(date '+%Y%m%d').log; then
+  exit
+fi
+
+check-installed
+update-scripts
+update-cronjobs
+if [[ $dsagent == *"installed"* ]]; then
+  sudo sudo yum -y -e 0 update -x 'kernel*'
+  sudo cat /var/log/yum.log | grep "$(date +'%b %d')" >> /var/log/plexity/$(date '+%Y%m%d').log
+  echo -e $(date +'%b %d %H:%M:%S')' Checked for updates to CentOS packages' >> /var/log/plexity/$(date '+%Y%m%d').log
+  dskernel
+else
+  sudo sudo yum -y -e 0 update
+  sudo grep -v plexmediaserver /var/log/yum.log | grep "$(date +'%b %d %H')" >> /var/log/plexity/$(date '+%Y%m%d').log
+fi
+if [[ $plexmediaserver == *"installed"* ]]; then
+  sudo /opt/plexity-plexupdate/plexupdate.sh
+  sudo grep -v plexmediaserver /var/log/yum.log | grep "$(date +'%b %d')" >> /var/log/plexity/$(date '+%Y%m%d').log
+  /opt/plexity-filebot/update-filebot.sh
+fi
+cat /var/log/plexity/$(date '+%Y%m%d').log | /opt/plexity/notify.sh
+
+passwordAuthenticated=$(cat /var/log/secure | grep Accepted | grep Jun | grep password | cut -d ' ' -f 12 | uniq)
+if [ -n "$passwordAuthenticated" ]; then
+  echo $(date +'%b %d %H:%M:%S') "Successful password logins were made this month from:" $passwordAuthenticated >> /var/log/plexity/$(date '+%Y%m%d').log
+fi
+
+echo -e $(date +'%b %d %H:%M:%S')' Logs sent' >> /var/log/plexity/$(date '+%Y%m%d').log
