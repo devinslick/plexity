@@ -27,6 +27,7 @@ else
   cp -n /etc/ssh/sshd_config /etc/ssh/sshd_config.plexitybackup
   sed -i 's/ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no    #plexity-no-cra/g' /etc/ssh/sshd_config
   sed -i 's/PasswordAuthentication yes/#PasswordAuthentication yes  #plexity-pass-comment/g' /etc/ssh/sshd_config
+  sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
   echo "PasswordAuthentication no   #plexity-passauthno" >> /etc/ssh/sshd_config
   echo -e 'Match Address '$(ip -o -f inet addr show | awk '/scope global/ {print $6}' | sed 's/255/0/g')/$(ip -o -f inet addr show | awk '/scope global/{print $4}' | cut -f 2 -d "/")' \t\t#plexity-matchaddr' >> /etc/ssh/sshd_config
   echo -e '\tPasswordAuthentication yes\t#plexity-matchaddrpathauth' >> /etc/ssh/sshd_config
