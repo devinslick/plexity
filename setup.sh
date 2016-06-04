@@ -1,43 +1,61 @@
 #!/bin/bash
 echo This script is intended to setup a Plex media server on CentOS 7.
 
-
-function installdsm
+function installDeepSecurityManager
 {
-  read -n 1 -p "Would you like to install the Deep Security Manager? [y/n]: " installDSM
-  if [ $installDSM = 'y' ]; then
-	  if [ -f /var/plexity/dsm.key ]; then
-		  $license=(cat /var/plexity/dsm.license)
-	  else
-		  read -n 1 -p "Would you like to add your license key now? [y/n]: " installDSM
-		  if [ $installDSM = 'y' ]; then
-        echo -n "Enter your Deep Security Manager license key: "
-			  read -u license
-			  echo $license > /var/plexity/dsm.license
-		  else
-			  license=""
-		  fi
+  if [ -f /var/plexity/dsm.key ]; then
+    $license=(cat /var/plexity/dsm.license)
+  else
+    read -n 1 -p "Would you like to add your license key now? [y/n]: " installDSM
+    if [ $installDSM = 'y' ]; then
+      echo -n "Enter your Deep Security Manager license key: "
+      read -u license
+      echo $license > /var/plexity/dsm.license
+    else
+      license=""
     fi
-  	wget http://files.trendmicro.com/products/deepsecurity/en/9.6/9.6_ServicePack1/Manager-Linux-9.6.4000.x64.sh -O /tmp/dsmsetup.sh --quiet 
-  	echo "AddressAndPortsScreen.NewNode=True" > /tmp/install.config
-  	echo "UpgradeVerification.Overwrite=False" >> /tmp/install.config
-  	echo "LicenseScreen.License.-1=$license" >> /tmp/install.config
-  	echo "DatabaseScreen.DatabaseType=Embedded" >> /tmp/install.config
-  	echo "CredentialsScreen.Administrator.Username=masteradmin" >> /tmp/install.config
-  	echo "CredentialsScreen.Administrator.Password=masteradmin" >> /tmp/install.config
-  	echo "CredentialsScreen.UseStrongPasswords=False" >> /tmp/install.config
-  	echo "SecurityUpdateScreen.UpdateComponents=True" >> /tmp/install.config
-  	echo "SoftwareUpdateScreen.UpdateSoftware=True" >> /tmp/install.config
-  	echo "RelayScreen.Install=False" >> /tmp/install.config
-  	echo "SmartProtectionNetworkScreen.EnableFeedback=False" >> /tmp/install.config
-  	chmod +x /tmp/dsmsetup.sh
-  	/tmp/dsmsetup.sh -q -console -varfile /tmp/install.config
-  	chkconfig dsm_s on
-  	systemctl start dsm_s
-	  echo "https://"$(hostname)":4119/SignIn.screen"
-	  echo "Login using the default username and password: masteradmin:masteradmin" 
   fi
+  
+  if [ -f /var/plexity/dsm.user ]; then
+    $dsmuser=(cat /var/plexity/dsm.user)
+    $dsmpass=(cat /var/plexity/dsm.pass)
+  else
+    read -n 1 -p "Would you like to configure a non-default username/password? [y/n]: " userpass
+    if [ $userpass = 'y' ]; then
+      echo -n "Enter your admin username [default is masteradmin]: "
+      read -u admin
+      echo $admin > /var/plexity/dsm.user
+      echo -n "Enter your admin password [default is masteradmin]: "
+      read -u pass
+      echo $pass > /var/plexity/dsm.pass
+    else
+      license=""
+    fi
+  fi
+  wget http://files.trendmicro.com/products/deepsecurity/en/9.6/9.6_ServicePack1/Manager-Linux-9.6.4000.x64.sh -O /tmp/dsmsetup.sh --quiet 
+  echo "AddressAndPortsScreen.NewNode=True" > /tmp/install.config
+  echo "UpgradeVerification.Overwrite=False" >> /tmp/install.config
+  echo "LicenseScreen.License.-1=$license" >> /tmp/install.config
+  echo "DatabaseScreen.DatabaseType=Embedded" >> /tmp/install.config
+  echo "CredentialsScreen.Administrator.Username=$admin" >> /tmp/install.config
+  echo "CredentialsScreen.Administrator.Password=$pass" >> /tmp/install.config
+  echo "CredentialsScreen.UseStrongPasswords=False" >> /tmp/install.config
+  echo "SecurityUpdateScreen.UpdateComponents=True" >> /tmp/install.config
+  echo "SoftwareUpdateScreen.UpdateSoftware=True" >> /tmp/install.config
+  echo "RelayScreen.Install=False" >> /tmp/install.config
+  echo "SmartProtectionNetworkScreen.EnableFeedback=False" >> /tmp/install.config
+  chmod +x /tmp/dsmsetup.sh
+  /tmp/dsmsetup.sh -q -console -varfile /tmp/install.config
+  chkconfig dsm_s on
+  systemctl start dsm_s
+  echo "https://"$(hostname)":4119/SignIn.screen"
+  echo "Login using the default username and password: masteradmin:masteradmin" 
 }
+
+read -n 1 -p "Would you like to install the Deep Security Manager? [y/n]: " installDSM
+if [ $installDSM = 'y' ]; then
+	installDeepSecurityManager
+fi
 
 read -n 1 -p "Would you like to continue? [y/n]: " installContinue
 if [ $installContinue = 'n' ]; then
