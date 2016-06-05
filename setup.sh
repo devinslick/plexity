@@ -30,6 +30,8 @@ function installDeepSecurityManager
       read -u pass
       echo $pass > /var/plexity/dsm.pass
     else
+      admin="masteradmin"
+      pass="masteradmin"
       license=""
     fi
   fi
