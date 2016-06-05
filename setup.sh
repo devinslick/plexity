@@ -3,8 +3,9 @@ echo This script is intended to setup a Plex media server on CentOS 7.
 
 function installDeepSecurityManager
 {
+  yum -y install java-1.8.0-openjdk*
   if [ -f /var/plexity/dsm.key ]; then
-    $license=(cat /var/plexity/dsm.license)
+    license=$(cat /var/plexity/dsm.license)
   else
     read -n 1 -p "Would you like to add your license key now? [y/n]: " installDSM
     if [ $installDSM = 'y' ]; then
@@ -17,8 +18,8 @@ function installDeepSecurityManager
   fi
   
   if [ -f /var/plexity/dsm.user ]; then
-    $dsmuser=(cat /var/plexity/dsm.user)
-    $dsmpass=(cat /var/plexity/dsm.pass)
+    dsmuser=$(cat /var/plexity/dsm.user)
+    dsmpass=$(cat /var/plexity/dsm.pass)
   else
     read -n 1 -p "Would you like to configure a non-default username/password? [y/n]: " userpass
     if [ $userpass = 'y' ]; then
