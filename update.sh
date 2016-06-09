@@ -29,6 +29,12 @@ function dskernel
     if [[ $install == *"Nothing to do"* ]]
     then
       echo $(date +'%b %d %H:%M:%S') " Kernel installation was attempted but there was nothing to do." >> /var/log/plexity/$(date '+%Y%m%d').log
+    elif [[ $install == *"No package kernel-"* ]]
+    then
+      echo $(date +'%b %d %H:%M:%S') " Kernel $RESULTS is not available for install" >> /var/log/plexity/$(date '+%Y%m%d').log
+    else
+      echo $(date +'%b %d %H:%M:%S') " Kernel updated from $installed to $RESULTS" >> /var/log/plexity/$(date '+%Y%m%d').log
+      shutdown -r +1 "Server is rebooting for kernel upgrade..."
     fi
   fi
 }
