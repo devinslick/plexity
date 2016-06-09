@@ -30,9 +30,6 @@ function dskernel
     then
       echo $(date +'%b %d %H:%M:%S') " Kernel installation was attempted but there was nothing to do." >> /var/log/plexity/$(date '+%Y%m%d').log
     fi
-    if [[ $install == *"No package kernel-"* ]]
-      echo $(date +'%b %d %H:%M:%S') " Kernel $RESULTS is not available for install" >> /var/log/plexity/$(date '+%Y%m%d').log
-    fi
   fi
 }
 
