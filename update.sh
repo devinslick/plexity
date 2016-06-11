@@ -3,7 +3,6 @@
 #creating functions
 function check-installed
 {
-  #plexmediaserver=$(yum info plexmediaserver.x86_64 | grep "Repo        : installed")
   dsagent=$(yum list ds_agent.x86_64)
   plexmediaserver=$(yum list plexmediaserver)
 }
@@ -13,7 +12,7 @@ function dskernel
 {
   installed=$(uname -r)
   installed=$(sed 's/.x86_64/ /g' <<<"$installed")
-  wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_kernels_EN.html" -O /tmp/dskernel.html
+  wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_SP1_kernels_EN.html" -O /tmp/dskernel.html
   RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' /tmp/dskernel.html | grep -F '.' | tail -1) > /dev/null 2>&1
   rm -f /tmp/dskernel.html > /dev/null 2>&1
   RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
