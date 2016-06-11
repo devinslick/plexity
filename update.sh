@@ -21,7 +21,7 @@ function dskernel
   then
     echo $(date +'%b %d %H:%M:%S')" You are running the latest kernel supported by Deep Security" >> /var/log/plexity/$(date '+%Y%m%d').log
   else
-    sudo yum -y install kernel-$RESULTS
+    sudo yum -y install kernel-$RESULTS --disableexcludes=all
     checkyum=$(tail -1 /var/log/yum.log)
     if [[ $checkyum == *"kernel-"* ]]
     then
