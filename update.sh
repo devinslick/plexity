@@ -21,17 +21,10 @@ function dskernel
   then
     echo $(date +'%b %d %H:%M:%S')" You are running the latest kernel supported by Deep Security" >> /var/log/plexity/$(date '+%Y%m%d').log
   else
-    install=$(sudo yum -y install kernel-$RESULTS)
-    #the following two lines are being used for troubleshooting and should be removed.
-    echo "$installed to $RESULTS" >> /var/log/plexity/$(date '+%Y%m%d')-kernel.log
-    echo $install >> /var/log/plexity/$(date '+%Y%m%d')-kernel.log
-    if [[ $install == *"Nothing to do"* ]]
+    sudo yum -y install kernel-$RESULTS
+    checkyum=$(tail -1 /var/log/yum.log)
+    if [[ $checkyum == *"kernel-"* ]]
     then
-      echo $(date +'%b %d %H:%M:%S') " Kernel installation was attempted but there was nothing to do." >> /var/log/plexity/$(date '+%Y%m%d').log
-    elif [[ $install == *"No package kernel-"* ]]
-    then
-      echo $(date +'%b %d %H:%M:%S') " Kernel $RESULTS is not available for install" >> /var/log/plexity/$(date '+%Y%m%d').log
-    else
       echo $(date +'%b %d %H:%M:%S') " Kernel updated from $installed to $RESULTS" >> /var/log/plexity/$(date '+%Y%m%d').log
       shutdown -r +1 "Server is rebooting for kernel upgrade..."
     fi
