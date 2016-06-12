@@ -64,6 +64,7 @@ if grep -q "Logs sent" /var/log/plexity/$(date '+%Y%m%d').log; then
   exit
 fi
 
+sudo bash
 check-installed
 update-scripts
 update-cronjobs
