@@ -1,7 +1,8 @@
-numberUnmanaged = $(/opt/plexity/scripts/deepsecuritymanager/countUnmanaged.sh)
-if [ $numberUnmanaged >= 0 ];
+numberUnmanaged=$(/opt/plexity/scripts/deepsecuritymanager/countUnmanaged.sh)
+if [ $numberUnmanaged -gt "0" ];
 then
-  echo $numberUnmanaged " are unmanaged"
+  #There are unmanaged agents in the Deep Security Manager"
 else
-  echo "All are managed"
+  #All are managed
+  /opt/plexity/scripts/deepsecuritymanager/getUnmanaged.sh
 fi
