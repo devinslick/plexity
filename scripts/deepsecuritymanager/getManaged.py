@@ -1,5 +1,5 @@
 import sdk
-mgr = sdk.dsm.Manager(hostname="localhost", username="datareader", password="abc123abc", ignore_ssl_validation=True)
+mgr = sdk.dsm.Manager(hostname="localhost", username=$(cat /var/plexity/dsm.script.user), password=$(cat /var/plexity/dsm.script.password), ignore_ssl_validation=True)
 mgr.sign_in()
 mgr.computers.get()
 for computer_id in mgr.computers.find(overall_status='Managed.*'):
