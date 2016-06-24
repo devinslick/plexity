@@ -1,5 +1,6 @@
 #!/bin/bash
-echo This script is intended to Plexity on a new computer.  
+echo "This script is intended to configure Plexity on a new computer."  
+echo "At the moment it will add users and install applications, though the goal is to separate these into their own tasks."
 
 read -n 1 -p "Would you like to continue? [y/n]: " installContinue
 if [ $installContinue = 'n' ]; then
