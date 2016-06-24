@@ -7,9 +7,9 @@ echo "Checking for kernel updates compatible with the Trend Micro Deep Security 
 installed=$(uname -r)
 installed=$(sed 's/.x86_64/ /g' <<<"$installed")
 echo "Running kernel: "$installed
-wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_kernels_EN.html"
-RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' Deep_Security_96_kernels_EN.html | grep -F '.' | tail -1) > /dev/null 2>&1
-rm -f Deep_Security_96_kernels_EN.html* > /dev/null 2>&1
+wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_SP1_kernels_EN.html" -O /tmp/dsa-kernel.latest
+RESULTS=$(sed -e '/centos7 (64-bit)/,/CloudLinux Kernels/!d' /tmp/dsa-kernel.latest | grep -F '.' | tail -1) > /dev/null 2>&1
+rm -f /tmp/dsa-kernel.latest > /dev/null 2>&1
 RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
 RESULTS=$(sed 's/.x86_64/ /g' <<<"$RESULTS")
 if [[ $installed == "$RESULTS" ]]
