@@ -1,8 +1,8 @@
-while read p; do
-  if [[ ${p:0:1} == '*' ]];
+while read app; do
+  if [[ ${app:0:1} == '*' ]];
   then
-    echo "Run $p script"
+    /opt/plexity/$(echo $app| cut -d "*" -f 1)/setup.sh
   else
-    echo "Yum install $p"
+    sudo yum install $app
   fi
-done < test
+done < /var/plexity/desired.apps
