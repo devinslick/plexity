@@ -5,7 +5,7 @@ deepsecurityagent=$(rpm -qa | grep ds_agent)
 
 if [ ${#plexmediaserver} -gt 0 ];
 then
-  /opt/plexity/plexmediaserver/update.sh
+  /opt/plexity/plexmediaserver/update.sh -a -C -d -s
 fi
 
 if [ ${#deepsecurityagent} -gt 0 ];
