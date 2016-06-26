@@ -41,10 +41,12 @@ fi
 read -n 1 -p "HandBrake video editor? [y/n]: " handbrake
 if [ $handbrake = 'y' ];
 then
-  echo 'HandBrake-{gui,cli}' >> /var/plexity/desired.apps
+  echo 'HandBrake-cli' >> /var/plexity/desired.apps
+  echo 'HandBrake-gui' >> /var/plexity/desired.apps
   echo "\n"
 else
-  sed -n -i '/HandBrake-{gui,cli}/!p' /var/plexity/desired.apps
+  sed -n -i '/HandBrake-cli/!p' /var/plexity/desired.apps
+  sed -n -i '/HandBrake-gui/!p' /var/plexity/desired.apps
   echo "\n"
 fi
 
