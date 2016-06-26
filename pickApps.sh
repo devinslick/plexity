@@ -53,12 +53,12 @@ if [ $players = 'y' ];
 then
   echo 'vlc' >> /var/plexity/desired.apps
   echo 'smplayer' >> /var/plexity/desired.apps
-  echo 'libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld' >> /var/plexity/desired.apps
+  echo 'libdvdcss gstreamer*' >> /var/plexity/desired.apps
   echo "\n"
 else
   sed -n -i '/vlc/!p' /var/plexity/desired.apps
   sed -n -i '/smplayer/!p' /var/plexity/desired.apps
-  sed -n -i '/libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld/!p' /var/plexity/desired.apps
+  sed -n -i '/libdvdcss gstreamer*/!p' /var/plexity/desired.apps
   echo "\n"
 fi
 
