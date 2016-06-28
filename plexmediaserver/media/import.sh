@@ -27,8 +27,8 @@ rm -rf /media/files/Queue/Compressed
 
 find /media/files/Complete/ -type f -size -40M -exec mv {} /media/files/Trash/ \; >/dev/null
 find /media/files/Complete/ -type f -size -200M -iname "*sample*" -exec mv {} /media/files/Trash/ \; >/dev/null
-find /media/files/Complete/ -type f -size -500M -exec mv {} /media/files/Queue/TV/ \; >/dev/null
-find /media/files/Complete/ -type f -size +500M -exec mv {} /media/files/Queue/Movies/ \; >/dev/null
+find /media/files/Complete/ -type f -size -600M -exec mv {} /media/files/Queue/TV/ \; >/dev/null
+find /media/files/Complete/ -type f -size +600M -exec mv {} /media/files/Queue/Movies/ \; >/dev/null
 
 sudo /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/media/files/Queue/TV/"
 sudo /opt/plexity-filebot/filebot.sh -script fn:xattr --action clear "/media/files/Queue/Movies/"
