@@ -11,7 +11,18 @@ fi
 if [ ${#deepsecurityagent} -gt 0 ];
 then
   yum -y -e 0 update -x 'kernel*'
-  /opt/plexity/deepsecurityagent/updatekernel.sh
+  kernelResult=$(/opt/plexity/deepsecurityagent/updatekernel.sh)
 else
   yum -y -e 0 update
+fi
+
+if rpm -qa | grep -qa VirtualBox;
+then
+  checkForKernelUpdate=$(tail -25 /var/log/yum.log | grep "$(date '+%b $d')" | grep "Installed: kernel")
+  if [ ${#checkForKernelUpdate} -gt 0 ];
+  then
+    /sbin/rcvboxdrv stop
+    yum -y install kernel-devel kernel-headers
+    /sbin/rcvboxdrv setup
+  fi
 fi
