@@ -1,5 +1,5 @@
 #!/bin/bash
-echo This script will setup to setup a Deep Security Manager on CentOS 7.
+echo This script will setup a Deep Security Manager on CentOS 7.
 yum -y install java-1.8.0-openjdk*
 if [ -f /var/plexity/dsm.key ];
 then
@@ -40,7 +40,7 @@ else
   fi
 fi
 
-wget http://files.trendmicro.com/products/deepsecurity/en/9.6/9.6_ServicePack1/Manager-Linux-9.6.4000.x64.sh -O /tmp/dsmsetup.sh --quiet 
+wget http://files.trendmicro.com/products/deepsecurity/en/9.6/9.6_ServicePack1/Manager-Linux-9.6.4014.x64.sh -O /tmp/dsmsetup.sh --quiet 
 echo "AddressAndPortsScreen.NewNode=True" > /tmp/install.config
 echo "UpgradeVerification.Overwrite=False" >> /tmp/install.config
 echo "LicenseScreen.License.-1=$license" >> /tmp/install.config
@@ -58,3 +58,4 @@ chkconfig dsm_s on
 systemctl start dsm_s
 echo "https://"$(hostname)":4119/SignIn.screen"
 echo "Login using the default username and password: masteradmin:masteradmin" 
+rm -rf /tmp/dsmsetupsh
