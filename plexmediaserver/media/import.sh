@@ -37,7 +37,6 @@ sudo /opt/plexity-filebot/filebot.sh -rename "/media/files/Queue/Movies/" -r --f
 
 
 find /media/files/Queue/ -empty -type d -delete
-find /media/files/Complete/ -empty -type d -delete
 
 echo Moving files from /media/files/Movies to /media/share/Movies...
 ls /media/files/Movies
