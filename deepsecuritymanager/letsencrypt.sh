@@ -1,16 +1,38 @@
-/opt/plexity/scripts/deepsecuritymanager/setup.sh
-systemctl stop dsm_s
+#!/bin/sh
+domain="home.devinslick.com"
 genkey=$(cat /opt/dsm/installfiles/genkey)
 genkey=$(echo $genkey | grep -o -P '(?<=-keypass ).*(?= -validity)')
-keytool -delete -alias root -storepass $genkey -keystore /root/.keystore -noprompt
-keytool -delete -alias tomcat -storepass $genkey -keystore /root/.keystore -noprompt
+pemsdir="/etc/letsencrypt/live/$domain"
+pfxspath="/etc/letsencrypt/live/$domain/pfx"
+passfile="/opt/dsm/keypass.txt"
+mkdir -p $pfxspath
+echo $genkey > $passfile
+for cnvifull in `find "${pemsdir}" -name 'cert*.pem' -o -name '*chain*.pem'`
+do
+  cnvifile=${cnvifull##*/}
+  cnvinum=`echo ${cnvifile%.*} | sed -e "s#[cert|chain|fullchain]##g"`
+  cnvipkey="${cnvifull%/*}/privkey${cnvinum}.pem"
+  cnvopem=`echo ${cnvifull} | sed -e "s#${pemsdir}#${pfxspath}#g"`
+  cnvofull="${cnvopem%.*}.pfx"
+  echo "- :-) ->"
+  echo "-in    ${cnvifull}"
+  echo "-inkey ${cnvipkey}"
+  echo "-out   ${cnvofull}"
+  mkdir -p ${cnvofull%/*}
+  openssl pkcs12 \
+    -export \
+    -in ${cnvifull} \
+    -inkey ${cnvipkey} \
+    -out ${cnvofull} \
+    -password pass:$genkey
+done
+#backup previous DSM keystore
+mkdir /opt/dsm/Backupkeystore 2&> /dev/null
+cp -n /opt/dsm/.keystore /opt/dsm/Backupkeystore/
+rm -rf /opt/dsm/.keystore
 
-openssl pkcs12 -export -in /etc/letsencrypt/live/home.devinslick.com/cert.pem -inkey /etc/letsencrypt/live/home.devinslick.com/privkey.pem -out /etc/letsencrypt/live/home.devinslick.com/cert_and_key.p12 -name tomcat -CAfile /etc/letsencrypt/live/home.devinslick.com/chain.pem -caname root -password pass:$genkey
+#create new keystore file
+echo $genkey|keytool -importkeystore -destkeystore /opt/dsm/mykeystore.ks -srckeystore /etc/letsencrypt/live/home.devinslick.com/pfx/cert.pfx -srcstoretype pkcs12 -deststoretype JKS -deststorepass pass:$genkey
 
-keytool -importkeystore -deststorepass $genkey -destkeypass $genkey -destkeystore /etc/letsencrypt/live/home.devinslick.com/MyDSKeyStore.jks -srckeystore /etc/letsencrypt/live/home.devinslick.com/cert_and_key.p12 -srcstoretype PKCS12 -srcstorepass $genkey -alias tomcat
-
-keytool -import -trustcacerts -alias root -file /etc/letsencrypt/live/home.devinslick.com/chain.pem -keystore /etc/letsencrypt/live/home.devinslick.com/MyDSKeyStore.jks -storepass $genkey
-
-mv /opt/dsm/.keystore /opt/dsm/.keystore-orig
-cp /etc/letsencrypt/live/home.devinslick.com/MyDSKeyStore.jks /opt/dsm/.keystore
-systemctl start dsm_s
+#restarting Deep Security Manager...
+systemctl restart dsm_s
