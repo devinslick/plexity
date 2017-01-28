@@ -64,6 +64,7 @@ echo "SmartProtectionNetworkScreen.EnableFeedback=False" >> /tmp/install.config
 chmod +x /tmp/dsmsetup.sh
 /tmp/dsmsetup.sh -q -console -varfile /tmp/install.config
 chkconfig dsm_s on
+echo 'protocols=TLSv1.2' >> /opt/dsm/configuration.properties
 systemctl start dsm_s
 echo "https://"$(hostname)":4119/SignIn.screen"
 echo "Login using the username and password: $dsmuser:$dsmpass"
