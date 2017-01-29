@@ -44,7 +44,7 @@ else
   fi
 fi
 
-wget http://files.trendmicro.com/products/deepsecurity/9.6_SP1_P1/DeepSecurityManager/Manager-Linux-9.6.4064.x64.sh -O /tmp/dsmsetup.sh
+wget http://files.trendmicro.com/products/deepsecurity/en/9.6/Manager-Linux-9.6.4085.x64.sh -O /tmp/dsmsetup.sh
 echo "AddressAndPortsScreen.NewNode=True" > /tmp/install.config
 echo "UpgradeVerification.Overwrite=False" >> /tmp/install.config
 echo "LicenseScreen.License.-1=$license" >> /tmp/install.config
