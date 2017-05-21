@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #       AUTHOR: Devin Slick
-#       Script purpose: Install the latest CentOS7 (x64) kernel supported with Trend Micro Deep Security 9.6
+#       Script purpose: Install the latest CentOS7 (x64) kernel supported with Trend Micro Deep Security 10
 #
 mkdir -p /var/log/plexity
 echo "Checking for kernel updates compatible with the Trend Micro Deep Security Agent..."
@@ -9,7 +9,7 @@ installed=$(uname -r)
 installed=$(sed 's/.x86_64/ /g' <<<"$installed")
 echo "Running kernel: "$installed
 yum -y install wget > /dev/null 2>&1
-wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/9.6/Deep_Security_96_SP1_kernels_EN.html" -O /tmp/dsa-kernel.latest
+wget -q "http://files.trendmicro.com/documentation/guides/deep_security/Kernel%20Support/10.0/Deep_Security_10_kernels_EN.html" -O /tmp/dsa-kernel.latest
 RESULTS=$(sed -n '/centos7 (64-bit)/,/<\/table>/p' /tmp/dsa-kernel.latest)
 RESULTS=$(echo $RESULTS | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')
 RESULTS=$(sed 's/.x86_64/ /g' <<<"$RESULTS")
